@@ -1,0 +1,9 @@
+Origin: Gorepo
+Label: Gorepo
+Suite: stable
+Version: 1.0
+Codename: ios
+Architectures: iphoneos-arm
+Components: main
+Description: Distribution of Unix Software for iPhoneOS
+Support: https://repo.gorepo.com/support
