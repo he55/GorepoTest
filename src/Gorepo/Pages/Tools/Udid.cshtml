@@ -1,0 +1,29 @@
+﻿@page
+@model Gorepo.Pages.UdidModel
+@{
+}
+
+<a href="/mobileconfig">Get Udid</a>
+<br/>
+<a href="itms-services://?action=download-manifest&url=https%3A%2F%2F192.168.0.105%3A5001%2Fcnblogs%2FCNBlogsUniversalDaily.plist">
+Install cnblogs
+</a>
+
+@{
+    PlistDictionary? plistDictionary = Model.PlistDictionary;
+    if (plistDictionary != null)
+    {
+        for (int i = 0; i < plistDictionary.Keys.Length; i++)
+        {
+            <div>@($"{plistDictionary.Keys[i]}: {plistDictionary.Values[i]}")</div>
+        }
+    }
+
+<br/>
+
+    if (Model.PlistString != null)
+    {
+        string plist = System.Net.WebUtility.UrlEncode(Model.PlistString);
+        <div><a href="hwz://?plist=@(plist)">Open App</a></div>
+    }
+}

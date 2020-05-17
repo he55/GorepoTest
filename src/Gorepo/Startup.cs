@@ -1,3 +1,4 @@
+using Gorepo.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
@@ -21,6 +22,8 @@ namespace Gorepo
         {
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddRazorPages();
+
+            services.AddSingleton<IDirectoryFormatter, Html5DirectoryFormatter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +43,9 @@ namespace Gorepo
             // app.UseHttpsRedirection();
 
             FileExtensionContentTypeProvider fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
+            fileExtensionContentTypeProvider.Mappings[".plist"] = "application/octet-stream";
+            fileExtensionContentTypeProvider.Mappings[".ipa"] = "application/octet-stream";
+            fileExtensionContentTypeProvider.Mappings[".mobileconfig"] = "application/x-apple-aspen-config";
             fileExtensionContentTypeProvider.Mappings[".bz2"] = "application/x-bzip2";
             fileExtensionContentTypeProvider.Mappings[".deb"] = "application/vnd.debian.binary-package";
 
@@ -48,7 +54,10 @@ namespace Gorepo
                 ContentTypeProvider = fileExtensionContentTypeProvider,
             });
 
-            app.UseDirectoryBrowser();
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                Formatter = app.ApplicationServices.GetService<IDirectoryFormatter>()
+            });
 
             app.UseRouting();
 

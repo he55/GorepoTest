@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Inc//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>PayloadContent</key>
+        <dict>
+            <key>URL</key>
+            <string>{{URL}}</string>
+            <key>DeviceAttributes</key>
+            <array>
+                <string>UDID</string>
+                <string>IMEI</string>
+                <string>MEID</string>
+                <string>ICCID</string>
+                <string>VERSION</string>
+                <string>PRODUCT</string>
+                <string>SERIAL</string>
+                <string>DEVICE_NAME</string>
+                <string>MAC_ADDRESS_EN0</string>
+            </array>
+            <key>Challenge</key>
+            <string>{{Challenge}}</string>
+        </dict>
+        <key>PayloadOrganization</key>
+        <string>Example Inc.</string>
+        <key>PayloadDisplayName</key>
+        <string>Profile Service</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>PayloadUUID</key>
+        <string>fdb376e5-b5bb-4d8c-829e-e90865f990c9</string>
+        <key>PayloadIdentifier</key>
+        <string>com.example.mobileconfig.profile-service</string>
+        <key>PayloadDescription</key>
+        <string>Enter device into the Example Inc encrypted profile service</string>
+        <key>PayloadType</key>
+        <string>Profile Service</string>
+    </dict>
+</plist>
