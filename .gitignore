@@ -435,3 +435,4 @@ $RECYCLE.BIN/
 # Packages
 debs/
 Packages*
+*.data
