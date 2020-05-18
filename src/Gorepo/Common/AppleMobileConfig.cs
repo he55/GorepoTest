@@ -7,15 +7,16 @@ namespace Gorepo.Common
     public static class AppleMobileConfig
     {
         private const string MobileConfigFileName = "mobileconfig";
-        private static string? _mobileConfigTemplate;
+
+        private static string? s_mobileConfigTemplate;
 
         public static async Task<string> GetMobileConfigTemplateAsync()
         {
-            if (_mobileConfigTemplate == null)
+            if (s_mobileConfigTemplate == null)
             {
-                _mobileConfigTemplate = await File.ReadAllTextAsync(MobileConfigFileName);
+                s_mobileConfigTemplate = await File.ReadAllTextAsync(MobileConfigFileName);
             }
-            return _mobileConfigTemplate;
+            return s_mobileConfigTemplate;
         }
 
         public static async Task<string> MakeMobileConfigAsync(string url, string challenge)

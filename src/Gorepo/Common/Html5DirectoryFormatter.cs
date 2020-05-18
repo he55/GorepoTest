@@ -28,7 +28,7 @@ namespace Gorepo.Common
 </li>
 ";
 
-        private static string? _directoryFormatterTemplate;
+        private static string? s_directoryFormatterTemplate;
 
         private readonly HtmlEncoder _htmlEncoder;
 
@@ -58,14 +58,13 @@ namespace Gorepo.Common
             stringBuilder.AppendFormat(PathLinkFormat, "/", "~");
 
             string cumulativePath = "/";
-            foreach (var segment in pathString.Value.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string segment in pathString.Value.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 cumulativePath = cumulativePath + segment + "/";
                 stringBuilder.AppendFormat(
                     PathLinkFormat,
                     HtmlEncode(cumulativePath),
-                    HtmlEncode(segment)
-                );
+                    HtmlEncode(segment));
             }
 
             return stringBuilder.ToString();
@@ -83,11 +82,10 @@ namespace Gorepo.Common
                     "directory",
                     "..",
                     "",
-                    ""
-                );
+                    "");
             }
 
-            foreach (var subdir in contents.Where(info => info.IsDirectory))
+            foreach (IFileInfo subdir in contents.Where(info => info.IsDirectory))
             {
                 stringBuilder.AppendFormat(
                     FileOrDirectoryFormat,
@@ -95,11 +93,10 @@ namespace Gorepo.Common
                     "directory",
                     HtmlEncode(subdir.Name),
                     "",
-                    subdir.LastModified.LocalDateTime.ToString()
-                );
+                    subdir.LastModified.LocalDateTime.ToString());
             }
 
-            foreach (var file in contents.Where(info => !info.IsDirectory))
+            foreach (IFileInfo file in contents.Where(info => !info.IsDirectory))
             {
                 stringBuilder.AppendFormat(
                     FileOrDirectoryFormat,
@@ -121,11 +118,11 @@ namespace Gorepo.Common
 
         private static async Task<string> GetDirectoryFormatterTemplateAsync()
         {
-            if (_directoryFormatterTemplate == null)
+            if (s_directoryFormatterTemplate == null)
             {
-                _directoryFormatterTemplate = await File.ReadAllTextAsync("directory");
+                s_directoryFormatterTemplate = await File.ReadAllTextAsync("directory");
             }
-            return _directoryFormatterTemplate;
+            return s_directoryFormatterTemplate;
         }
     }
 }
