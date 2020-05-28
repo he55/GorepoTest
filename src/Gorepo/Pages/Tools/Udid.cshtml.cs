@@ -14,7 +14,6 @@ namespace Gorepo.Pages
     {
         private const string TimestampCookieKey = "timestamp";
         private const double TimestampCookieTimeoutSeconds = 60.0;
-
         private const string PlistKeyFormat = "plist_{0}";
         private const string PlistPathFormat = "plist/{0}.data";
         private const double PlistCacheTimeoutSeconds = 100.0;
