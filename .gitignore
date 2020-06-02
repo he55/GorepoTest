@@ -433,6 +433,6 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 # Packages
-debs/
+*.deb
 Packages*
 *.data

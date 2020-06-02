@@ -1,4 +1,5 @@
 #!/bin/bash
+
 TMPDIR=$(mktemp -d)
 
 dpkg-scanpackages -m debs >$TMPDIR/Packages || exit 1
