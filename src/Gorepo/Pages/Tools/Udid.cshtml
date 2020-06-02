@@ -1,11 +1,8 @@
 ﻿@page
 @model Gorepo.Pages.UdidModel
-@{
-}
 
 <a href="/mobileconfig">Get Udid</a>
 <br/>
-
 
 @{
     PlistDictionary? plistDictionary = Model.PlistDictionary;
@@ -15,13 +12,5 @@
         {
             <div>@($"{plistDictionary.Keys[i]}: {plistDictionary.Values[i]}")</div>
         }
-    }
-
-<br/>
-
-    if (Model.PlistString != null)
-    {
-        string plist = System.Net.WebUtility.UrlEncode(Model.PlistString);
-        <div><a href="hwz://?plist=@(plist)">Open App</a></div>
     }
 }
