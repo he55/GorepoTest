@@ -63,8 +63,8 @@ namespace Gorepo.Common
                 cumulativePath = cumulativePath + segment + "/";
                 stringBuilder.AppendFormat(
                     PathLinkFormat,
-                    HtmlEncode(cumulativePath),
-                    HtmlEncode(segment));
+                    _htmlEncoder.Encode(cumulativePath),
+                    _htmlEncoder.Encode(segment));
             }
 
             return stringBuilder.ToString();
@@ -91,7 +91,7 @@ namespace Gorepo.Common
                     FileOrDirectoryFormat,
                     pathString.Add($"/{subdir.Name}/"),
                     "directory",
-                    HtmlEncode(subdir.Name),
+                    _htmlEncoder.Encode(subdir.Name),
                     "",
                     subdir.LastModified.LocalDateTime.ToString());
             }
@@ -102,18 +102,13 @@ namespace Gorepo.Common
                     FileOrDirectoryFormat,
                     pathString.Add($"/{file.Name}"),
                     "default",
-                    HtmlEncode(file.Name),
+                    _htmlEncoder.Encode(file.Name),
                     file.Length.ToString("n0"),
                     file.LastModified.LocalDateTime.ToString()
                 );
             }
 
             return stringBuilder.ToString();
-        }
-
-        private string HtmlEncode(string body)
-        {
-            return _htmlEncoder.Encode(body);
         }
 
         private static async Task<string> GetDirectoryFormatterTemplateAsync()
