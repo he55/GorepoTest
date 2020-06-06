@@ -1,3 +1,4 @@
+using System;
 using Gorepo.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,9 @@ namespace Gorepo
             services.AddRazorPages();
 
             services.AddSingleton<IDirectoryFormatter, HWZDirectoryFormatter>();
+
+            services.AddHttpClient("wed", httpClient => httpClient.BaseAddress = new Uri("http://192.168.0.100:5200"));
+            services.AddHostedService<Worker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
