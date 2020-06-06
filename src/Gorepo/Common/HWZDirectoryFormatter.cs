@@ -14,7 +14,7 @@ namespace Gorepo.Common
     /// <summary>
     /// Generates an HTML view for a directory.
     /// </summary>
-    public class Html5DirectoryFormatter : IDirectoryFormatter
+    public class HWZDirectoryFormatter : IDirectoryFormatter
     {
         private const string TextHtmlUtf8 = "text/html; charset=utf-8";
         private const string PathLinkFormat = "<a href=\"{0}\">{1}</a> / ";
@@ -32,7 +32,7 @@ namespace Gorepo.Common
 
         private readonly HtmlEncoder _htmlEncoder;
 
-        public Html5DirectoryFormatter(HtmlEncoder htmlEncoder)
+        public HWZDirectoryFormatter(HtmlEncoder htmlEncoder)
         {
             _htmlEncoder = htmlEncoder;
         }

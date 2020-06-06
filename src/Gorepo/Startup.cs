@@ -23,7 +23,7 @@ namespace Gorepo
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddRazorPages();
 
-            services.AddSingleton<IDirectoryFormatter, Html5DirectoryFormatter>();
+            services.AddSingleton<IDirectoryFormatter, HWZDirectoryFormatter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
