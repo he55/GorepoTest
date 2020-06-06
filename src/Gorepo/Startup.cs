@@ -42,16 +42,9 @@ namespace Gorepo
 
             // app.UseHttpsRedirection();
 
-            FileExtensionContentTypeProvider fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
-            fileExtensionContentTypeProvider.Mappings[".plist"] = "application/octet-stream";
-            fileExtensionContentTypeProvider.Mappings[".ipa"] = "application/octet-stream";
-            fileExtensionContentTypeProvider.Mappings[".mobileconfig"] = "application/x-apple-aspen-config";
-            fileExtensionContentTypeProvider.Mappings[".bz2"] = "application/x-bzip2";
-            fileExtensionContentTypeProvider.Mappings[".deb"] = "application/vnd.debian.binary-package";
-
             app.UseStaticFiles(new StaticFileOptions()
             {
-                ContentTypeProvider = fileExtensionContentTypeProvider,
+                ContentTypeProvider = new HWZFileExtensionContentTypeProvider()
             });
 
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
