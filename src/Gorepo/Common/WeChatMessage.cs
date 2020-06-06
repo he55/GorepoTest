@@ -1,4 +1,7 @@
-﻿using System.Xml;
+﻿using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace Gorepo.Common
 {
@@ -47,6 +50,13 @@ namespace Gorepo.Common
             };
 
             return messageInfo;
+        }
+
+        public static async Task<WeChatMessageItem[]> GetWeChatMessageItemAsync(HttpClient httpClient)
+        {
+            return await JsonSerializer.DeserializeAsync<WeChatMessageItem[]>(
+                await httpClient.GetStreamAsync("api/messages"),
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
     }
 
