@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Gorepo.Common
 {
-    public class WeChatMessage
+    public static class WeChatMessage
     {
         public static object GetMessageInfo(string xmlMessage)
         {
@@ -63,7 +63,7 @@ namespace Gorepo.Common
     public class WeChatMessageItem
     {
         public int Timestamp { get; set; }
-        public string MessageId { get; set; }
-        public string Message { get; set; }
+        public string MessageId { get; set; } = null!;
+        public string Message { get; set; } = null!;
     }
 }
