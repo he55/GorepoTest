@@ -30,6 +30,7 @@ namespace Gorepo
             services.AddHttpClient("wed", httpClient =>
             {
                 httpClient.BaseAddress = new Uri(Configuration.GetValue<string>("App:wed"));
+                httpClient.Timeout = TimeSpan.FromSeconds(3.0);
             });
             services.AddSingleton<WeChatMessageService>();
 
