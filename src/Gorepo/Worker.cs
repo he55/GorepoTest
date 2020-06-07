@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Gorepo.Data;
 using Gorepo.Models;
 using Gorepo.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,21 +16,26 @@ namespace Gorepo
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly WeChatMessageService _messageService;
         private int _timestamp;
 
         public Worker(ILogger<Worker> logger,
+            IConfiguration configuration,
             IServiceProvider serviceProvider,
             WeChatMessageService messageService)
         {
             _logger = logger;
+            _configuration = configuration;
             _serviceProvider = serviceProvider;
             _messageService = messageService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            string orderIdPrefix = _configuration.GetValue<string>("App:OrderIdPrefix");
+
             {
                 HWZContext hwzContext = _serviceProvider.CreateScope()
                     .ServiceProvider
@@ -55,13 +62,23 @@ namespace Gorepo
 
                         foreach (WeChatMessageItem message in messages)
                         {
-                            hwzContext.Messages.Add(new HWZMessage
+                            Dictionary<string, string> messageInfo = _messageService.GetMessageInfo(message.Message);
+
+                            string orderId = messageInfo["detail_content_value_1"];
+                            orderId = orderIdPrefix + message.MessageId;
+
+                            if (orderId.StartsWith(orderIdPrefix) &&
+                                decimal.TryParse(messageInfo["detail_content_value_0"].Replace("гд", ""), out decimal amount))
                             {
-                                CreateTime = message.Timestamp,
-                                ServerId = message.MessageId,
-                                Content = message.Message,
-                                OrderId = $"id_{message.MessageId}"
-                            });
+                                hwzContext.Messages.Add(new HWZMessage
+                                {
+                                    ServerId = message.MessageId,
+                                    CreateTime = message.Timestamp,
+                                    Content = message.Message,
+                                    OrderId = orderId,
+                                    OrderAmount = amount
+                                });
+                            }
                         }
 
                         await hwzContext.SaveChangesAsync();
