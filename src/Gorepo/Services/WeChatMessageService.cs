@@ -8,6 +8,13 @@ namespace Gorepo.Services
 {
     public class WeChatMessageService
     {
+        private readonly HttpClient _httpClient;
+
+        public WeChatMessageService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("wed");
+        }
+
         public object GetMessageInfo(string xmlMessage)
         {
             XmlDocument xmlDocument = new XmlDocument();
@@ -53,10 +60,10 @@ namespace Gorepo.Services
             return messageInfo;
         }
 
-        public async Task<WeChatMessageItem[]> GetWeChatMessageItemAsync(HttpClient httpClient)
+        public async Task<WeChatMessageItem[]> GetWeChatMessageItemAsync()
         {
             return await JsonSerializer.DeserializeAsync<WeChatMessageItem[]>(
-                await httpClient.GetStreamAsync("api/messages"),
+                await _httpClient.GetStreamAsync("api/messages"),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using Gorepo.Common;
+using Gorepo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
@@ -26,7 +27,12 @@ namespace Gorepo
 
             services.AddSingleton<IDirectoryFormatter, HWZDirectoryFormatter>();
 
-            services.AddHttpClient("wed", httpClient => httpClient.BaseAddress = new Uri("http://192.168.0.100:5200"));
+            services.AddHttpClient("wed", httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(Configuration.GetValue<string>("App:wed"));
+            });
+            services.AddSingleton<WeChatMessageService>();
+
             services.AddHostedService<Worker>();
         }
 
