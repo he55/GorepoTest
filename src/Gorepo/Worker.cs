@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Gorepo.Context;
+using Gorepo.Data;
 using Gorepo.Models;
 using Gorepo.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -72,7 +72,7 @@ namespace Gorepo
                     _logger.LogError(ex, "{message}", ex.Message);
                 }
 
-                await Task.Delay(3000, stoppingToken);
+                await Task.Delay(10_000, stoppingToken);
             }
         }
     }

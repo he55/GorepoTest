@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorepo.Context
+namespace Gorepo.Data
 {
     public class HWZContext : DbContext
     {
