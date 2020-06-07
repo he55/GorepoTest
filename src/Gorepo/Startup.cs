@@ -1,5 +1,6 @@
 using System;
 using Gorepo.Common;
+using Gorepo.Context;
 using Gorepo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,6 @@ namespace Gorepo
                 httpClient.Timeout = TimeSpan.FromSeconds(3.0);
             });
             services.AddSingleton<WeChatMessageService>();
-
             services.AddHostedService<Worker>();
         }
 
