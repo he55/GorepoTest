@@ -75,6 +75,7 @@ namespace Gorepo
                                     ServerId = message.MessageId,
                                     CreateTime = message.Timestamp,
                                     Content = message.Message,
+                                    PublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
                                     OrderId = orderId,
                                     OrderAmount = amount
                                 });
