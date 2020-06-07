@@ -2,12 +2,13 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
+using Gorepo.Models;
 
-namespace Gorepo.Common
+namespace Gorepo.Services
 {
-    public static class WeChatMessage
+    public class WeChatMessageService
     {
-        public static object GetMessageInfo(string xmlMessage)
+        public object GetMessageInfo(string xmlMessage)
         {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(xmlMessage);
@@ -52,18 +53,11 @@ namespace Gorepo.Common
             return messageInfo;
         }
 
-        public static async Task<WeChatMessageItem[]> GetWeChatMessageItemAsync(HttpClient httpClient)
+        public async Task<WeChatMessageItem[]> GetWeChatMessageItemAsync(HttpClient httpClient)
         {
             return await JsonSerializer.DeserializeAsync<WeChatMessageItem[]>(
                 await httpClient.GetStreamAsync("api/messages"),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
-    }
-
-    public class WeChatMessageItem
-    {
-        public int Timestamp { get; set; }
-        public string MessageId { get; set; } = null!;
-        public string Message { get; set; } = null!;
     }
 }
