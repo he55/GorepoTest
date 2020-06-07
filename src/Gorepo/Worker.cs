@@ -52,7 +52,7 @@ namespace Gorepo
 
                 try
                 {
-                    WeChatMessageItem[] messages = await _messageService.GetWeChatMessageItemsAsync(_timestamp);
+                    WeChatMessage[] messages = await _messageService.GetWeChatMessagesAsync(_timestamp);
 
                     if (messages.Length > 0)
                     {
@@ -60,21 +60,21 @@ namespace Gorepo
                             .ServiceProvider
                             .GetRequiredService<HWZContext>();
 
-                        foreach (WeChatMessageItem message in messages)
+                        foreach (WeChatMessage message in messages)
                         {
                             Dictionary<string, string> messageInfo = _messageService.GetMessageInfo(message.Message);
 
                             string orderId = messageInfo["detail_content_value_1"];
-                            orderId = orderIdPrefix + message.MessageId;
+                            orderId = orderIdPrefix + message.ServerId;
 
                             if (orderId.StartsWith(orderIdPrefix) &&
                                 decimal.TryParse(messageInfo["detail_content_value_0"].Replace("гд", ""), out decimal amount))
                             {
                                 hwzContext.Messages.Add(new HWZMessage
                                 {
-                                    ServerId = message.MessageId,
-                                    CreateTime = message.Timestamp,
-                                    Content = message.Message,
+                                    CreateTime = message.CreateTime,
+                                    ServerId = message.ServerId,
+                                    Message = message.Message,
                                     PublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
                                     OrderId = orderId,
                                     OrderAmount = amount
@@ -84,7 +84,7 @@ namespace Gorepo
 
                         await hwzContext.SaveChangesAsync();
 
-                        _timestamp = messages.Max(x => x.Timestamp);
+                        _timestamp = messages.Max(x => x.CreateTime);
                     }
                 }
                 catch (Exception ex)
