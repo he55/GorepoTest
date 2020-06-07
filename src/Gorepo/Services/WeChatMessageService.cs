@@ -60,7 +60,7 @@ namespace Gorepo.Services
             return messageInfo;
         }
 
-        public async Task<WeChatMessageItem[]> GetWeChatMessageItemAsync()
+        public async Task<WeChatMessageItem[]> GetWeChatMessageItemsAsync()
         {
             return await JsonSerializer.DeserializeAsync<WeChatMessageItem[]>(
                 await _httpClient.GetStreamAsync("api/messages"),
