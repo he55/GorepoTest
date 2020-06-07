@@ -5,6 +5,7 @@ using Gorepo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +35,10 @@ namespace Gorepo
                 httpClient.Timeout = TimeSpan.FromSeconds(3.0);
             });
             services.AddSingleton<WeChatMessageService>();
+
+            services.AddDbContextPool<HWZContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("sqlite")));
+
             services.AddHostedService<Worker>();
         }
 

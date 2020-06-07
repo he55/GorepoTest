@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="directory">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
