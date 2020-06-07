@@ -68,7 +68,7 @@ namespace Gorepo
                             orderId = orderIdPrefix + message.ServerId;
 
                             if (orderId.StartsWith(orderIdPrefix) &&
-                                decimal.TryParse(messageInfo["detail_content_value_0"].Replace("гд", ""), out decimal amount))
+                                decimal.TryParse(messageInfo["detail_content_value_0"].Replace("\uffe5", ""), out decimal amount))
                             {
                                 hwzContext.Messages.Add(new HWZMessage
                                 {
