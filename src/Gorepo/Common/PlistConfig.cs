@@ -6,7 +6,7 @@ namespace Gorepo.Common
 {
     public static class PlistConfig
     {
-        private static readonly Regex _regex = new Regex("<\\?xml[\\s\\S]+</plist>");
+        private static readonly Regex s_regex = new Regex("<\\?xml[\\s\\S]+</plist>");
 
         public static PlistDictionary GetPlistConfigModel(string plistString)
         {
@@ -22,7 +22,7 @@ namespace Gorepo.Common
         {
             using (StreamReader streamReader = new StreamReader(stream))
             {
-                Match match = _regex.Match(streamReader.ReadToEnd());
+                Match match = s_regex.Match(streamReader.ReadToEnd());
                 plistString = match.Value;
                 return match.Success;
             }
