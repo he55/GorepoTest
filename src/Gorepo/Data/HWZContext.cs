@@ -11,13 +11,31 @@ namespace Gorepo.Data
         }
 
         public DbSet<HWZMessage> Messages { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<HWZMessage>()
+                .HasIndex(m => m.Id)
+                .IsUnique();
+
+            modelBuilder.Entity<HWZMessage>()
+                .HasIndex(m => m.ServerId)
+                .IsUnique();
+
+            modelBuilder.Entity<HWZMessage>()
+                .HasIndex(m => m.CreateTime);
+
+            modelBuilder.Entity<HWZMessage>()
+                .HasIndex(m => m.OrderId)
+                .IsUnique();
+        }
     }
 
     public class HWZMessage
     {
         public int Id { get; set; }
-        public int CreateTime { get; set; }
         public string ServerId { get; set; } = null!;
+        public int CreateTime { get; set; }
         public string Content { get; set; } = null!;
         public int PublishTime { get; set; }
         public string OrderId { get; set; } = null!;

@@ -34,6 +34,8 @@ namespace Gorepo
                     .ServiceProvider
                     .GetRequiredService<HWZContext>();
 
+                await hwzContext.Database.EnsureCreatedAsync();
+
                 _timestamp = hwzContext.Messages.Max(x => (int?)x.CreateTime) ?? 0;
             }
 
@@ -58,7 +60,7 @@ namespace Gorepo
                                 CreateTime = message.Timestamp,
                                 ServerId = message.MessageId,
                                 Content = message.Message,
-                                OrderId = "id"
+                                OrderId = $"id_{message.MessageId}"
                             });
                         }
 
