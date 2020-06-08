@@ -16,9 +16,13 @@ namespace Gorepo.Controllers
         }
 
         [HttpGet]
-        public object GetOrder(string orderId)
+        public ActionResult<object> GetOrder(string orderId)
         {
             HWZMessage message = _context.Messages.FirstOrDefault(m => m.OrderId == orderId);
+            if (message == null)
+            {
+                return NotFound();
+            }
             return message;
         }
     }
