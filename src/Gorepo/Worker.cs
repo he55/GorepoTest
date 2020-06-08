@@ -19,7 +19,7 @@ namespace Gorepo
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly WeChatMessageService _messageService;
-        private int _lastCreateTime;
+        private int _timestamp;
 
         public Worker(ILogger<Worker> logger,
             IConfiguration configuration,
@@ -43,7 +43,7 @@ namespace Gorepo
 
                 await context.Database.EnsureCreatedAsync();
 
-                _lastCreateTime = context.Messages.Max(x => (int?)x.CreateTime) ?? 0;
+                _timestamp = context.Messages.Max(x => (int?)x.CreateTime) ?? 0;
             }
 
             while (!stoppingToken.IsCancellationRequested)
@@ -52,7 +52,7 @@ namespace Gorepo
 
                 try
                 {
-                    WeChatMessage[] messages = await _messageService.GetWeChatMessagesAsync(_lastCreateTime);
+                    WeChatMessage[] messages = await _messageService.GetWeChatMessagesAsync(_timestamp);
 
                     if (messages.Length > 0)
                     {
@@ -84,7 +84,7 @@ namespace Gorepo
 
                         await context.SaveChangesAsync();
 
-                        _lastCreateTime = messages.Max(x => x.CreateTime);
+                        _timestamp = messages.Max(x => x.CreateTime);
                     }
                 }
                 catch (Exception ex)

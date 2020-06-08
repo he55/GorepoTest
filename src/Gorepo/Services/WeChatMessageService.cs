@@ -61,10 +61,10 @@ namespace Gorepo.Services
             return messageInfo;
         }
 
-        public async Task<WeChatMessage[]> GetWeChatMessagesAsync(int createTime)
+        public async Task<WeChatMessage[]> GetWeChatMessagesAsync(int timestamp)
         {
             return await JsonSerializer.DeserializeAsync<WeChatMessage[]>(
-                await _httpClient.GetStreamAsync($"api/messages?createTime={createTime}"),
+                await _httpClient.GetStreamAsync($"api/messages?timestamp={timestamp}"),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
     }
