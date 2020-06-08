@@ -37,13 +37,13 @@ namespace Gorepo
             string orderIdPrefix = _configuration.GetValue<string>("App:OrderIdPrefix");
 
             {
-                HWZContext hwzContext = _serviceProvider.CreateScope()
+                HWZContext context = _serviceProvider.CreateScope()
                     .ServiceProvider
                     .GetRequiredService<HWZContext>();
 
-                await hwzContext.Database.EnsureCreatedAsync();
+                await context.Database.EnsureCreatedAsync();
 
-                _lastCreateTime = hwzContext.Messages.Max(x => (int?)x.CreateTime) ?? 0;
+                _lastCreateTime = context.Messages.Max(x => (int?)x.CreateTime) ?? 0;
             }
 
             while (!stoppingToken.IsCancellationRequested)
@@ -56,7 +56,7 @@ namespace Gorepo
 
                     if (messages.Length > 0)
                     {
-                        HWZContext hwzContext = _serviceProvider.CreateScope()
+                        HWZContext context = _serviceProvider.CreateScope()
                             .ServiceProvider
                             .GetRequiredService<HWZContext>();
 
@@ -70,7 +70,7 @@ namespace Gorepo
                             if (orderId.StartsWith(orderIdPrefix) &&
                                 decimal.TryParse(messageInfo["detail_content_value_0"].Replace("\uffe5", ""), out decimal amount))
                             {
-                                hwzContext.Messages.Add(new HWZMessage
+                                context.Messages.Add(new HWZMessage
                                 {
                                     CreateTime = message.CreateTime,
                                     ServerId = message.ServerId,
@@ -82,7 +82,7 @@ namespace Gorepo
                             }
                         }
 
-                        await hwzContext.SaveChangesAsync();
+                        await context.SaveChangesAsync();
 
                         _lastCreateTime = messages.Max(x => x.CreateTime);
                     }
