@@ -18,8 +18,14 @@ namespace Gorepo.Controllers
         [HttpGet]
         public ActionResult<object> GetOrder(string orderId)
         {
-            HWZMessage message = _context.Messages.
-                FirstOrDefault(m => m.OrderId == orderId);
+            var message = _context.Messages
+                .Where(m => m.OrderId == orderId)
+                .Select(m => new
+                {
+                    m.OrderId,
+                    m.OrderAmount
+                })
+                .FirstOrDefault();
 
             if (message == null)
             {
