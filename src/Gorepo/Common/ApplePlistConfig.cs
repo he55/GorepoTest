@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace Gorepo.Common
 {
-    public static class PlistConfig
+    public static class ApplePlistConfig
     {
         private static readonly Regex s_regex = new Regex("<\\?xml[\\s\\S]+</plist>");
 
