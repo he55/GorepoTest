@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Gorepo.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,13 +11,16 @@ namespace Gorepo.Controllers
     public class OrderController : ControllerBase
     {
         private readonly HWZContext _context;
+        private readonly HttpClient _httpClient;
 
-        public OrderController(HWZContext context)
+        public OrderController(HWZContext context,
+            IHttpClientFactory httpClientFactory)
         {
             _context = context;
+            _httpClient = httpClientFactory.CreateClient("wed");
         }
 
-        [HttpGet]
+        [HttpGet("{orderId}")]
         public ActionResult<object> GetOrder(string orderId)
         {
             var message = _context.Messages
@@ -32,6 +37,12 @@ namespace Gorepo.Controllers
                 return NotFound();
             }
             return message;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<object>> PostOrderAsync(string orderId, decimal orderAmount)
+        {
+            return await _httpClient.GetStringAsync($"api/make_order?orderId={orderId}&orderAmount={orderAmount}");
         }
     }
 }
