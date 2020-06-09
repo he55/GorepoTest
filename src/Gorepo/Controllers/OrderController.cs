@@ -14,14 +14,12 @@ namespace Gorepo
         private readonly HWZGorepoContext _context;
         private readonly HttpClient _httpClient;
 
-
         public OrderController(HWZGorepoContext context,
             IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _httpClient = httpClientFactory.CreateClient("wed");
         }
-
 
         [HttpGet("{orderId}")]
         public async Task<ResultModel> GetOrderAsync(string orderId)
@@ -62,7 +60,6 @@ namespace Gorepo
             return this.ResultSuccess(message);
         }
 
-
         [HttpPost]
         public async Task<ResultModel> CreateOrderAsync(WeChatOrder order)
         {
@@ -82,10 +79,10 @@ namespace Gorepo
             }
 
 
-            string code;
+            string orderCode;
             try
             {
-                code = await _httpClient.GetStringAsync(
+                orderCode = await _httpClient.GetStringAsync(
                     $"api/make_order?orderId={order.OrderId}&orderAmount={order.OrderAmount}");
             }
             catch
@@ -100,7 +97,7 @@ namespace Gorepo
             {
                 OrderId = order.OrderId,
                 OrderAmount = order.OrderAmount,
-                OrderCode = code,
+                OrderCode = orderCode,
                 CreateTime = timestamp,
                 UpdateTime = timestamp
             });
@@ -108,7 +105,7 @@ namespace Gorepo
             await _context.SaveChangesAsync();
 
 
-            order.Code = code;
+            order.OrderCode = orderCode;
             return this.ResultSuccess(order);
         }
     }

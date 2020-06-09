@@ -2,8 +2,8 @@
 {
     public class WeChatOrder
     {
-        public string OrderId { get; set; } = "";
+        public string OrderId { get; set; } = null!;
         public decimal OrderAmount { get; set; }
-        public string Code { get; set; } = "";
+        public string OrderCode { get; set; } = "";
     }
 }

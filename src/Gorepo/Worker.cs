@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Gorepo.Data;
-using Gorepo.Models;
-using Gorepo.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,55 +45,61 @@ namespace Gorepo
 
             while (!stoppingToken.IsCancellationRequested)
             {
+                await Task.Delay(10_000, stoppingToken);
+
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
+
+                WeChatMessage[] messages;
                 try
                 {
-                    WeChatMessage[] messages = await _messageService.GetWeChatMessagesAsync(_timestamp);
-
-                    if (messages.Length > 0)
-                    {
-                        HWZGorepoContext context = _serviceProvider.CreateScope()
-                            .ServiceProvider
-                            .GetRequiredService<HWZGorepoContext>();
-
-                        foreach (WeChatMessage message in messages)
-                        {
-                            Dictionary<string, string> messageInfo = _messageService.GetMessageInfo(message.Message);
-
-                            string orderId = messageInfo["detail_content_value_1"];
-                            orderId = orderIdPrefix + message.ServerId;
-
-                            if (orderId.StartsWith(orderIdPrefix) &&
-                                decimal.TryParse(messageInfo["detail_content_value_0"].Replace("\uffe5", ""), out decimal amount))
-                            {
-                                long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-                                context.WeChatMessages.Add(new HWZWeChatMessage
-                                {
-                                    MessageCreateTime = message.CreateTime,
-                                    MessageId = message.ServerId,
-                                    MessageContent = message.Message,
-                                    MessagePublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
-                                    OrderId = orderId,
-                                    OrderAmount = amount,
-                                    CreateTime = timestamp,
-                                    UpdateTime = timestamp
-                                });
-                            }
-                        }
-
-                        await context.SaveChangesAsync();
-
-                        _timestamp = messages.Max(x => x.CreateTime);
-                    }
+                    messages = await _messageService.GetWeChatMessagesAsync(_timestamp);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "{message}", ex.Message);
+                    continue;
                 }
 
-                await Task.Delay(10_000, stoppingToken);
+
+                if (messages.Length == 0)
+                {
+                    continue;
+                }
+
+
+                HWZGorepoContext context = _serviceProvider.CreateScope()
+                    .ServiceProvider
+                    .GetRequiredService<HWZGorepoContext>();
+
+                foreach (WeChatMessage message in messages)
+                {
+                    Dictionary<string, string> messageInfo = _messageService.GetMessageInfo(message.Message);
+
+                    string orderId = messageInfo["detail_content_value_1"];
+                    orderId = orderIdPrefix + message.ServerId;
+
+                    if (orderId.StartsWith(orderIdPrefix) &&
+                        decimal.TryParse(messageInfo["detail_content_value_0"].Replace("\uffe5", ""), out decimal amount))
+                    {
+                        long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                        context.WeChatMessages.Add(new HWZWeChatMessage
+                        {
+                            MessageCreateTime = message.CreateTime,
+                            MessageId = message.ServerId,
+                            MessageContent = message.Message,
+                            MessagePublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
+                            OrderId = orderId,
+                            OrderAmount = amount,
+                            CreateTime = timestamp,
+                            UpdateTime = timestamp
+                        });
+
+                        await context.SaveChangesAsync();
+                        _timestamp = message.CreateTime;
+                    }
+                }
             }
         }
     }

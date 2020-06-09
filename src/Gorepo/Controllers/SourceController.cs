@@ -28,7 +28,7 @@ namespace Gorepo
         public async Task<IActionResult> GetMobileConfigAsync()
         {
             string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
-            string url = $"{s_appUrl}/tools/udid?timestamp={timestamp}";
+            string url = $"{s_appUrl}/tools/udid?t={timestamp}";
 
             string mobileConfig = await AppleMobileConfig.MakeMobileConfigAsync(url, timestamp);
             return Content(mobileConfig, "application/x-apple-aspen-config");
