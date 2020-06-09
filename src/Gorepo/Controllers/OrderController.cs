@@ -16,12 +16,14 @@ namespace Gorepo.Controllers
         private readonly HWZContext _context;
         private readonly HttpClient _httpClient;
 
+
         public OrderController(HWZContext context,
             IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _httpClient = httpClientFactory.CreateClient("wed");
         }
+
 
         [HttpGet("{orderId}")]
         public async Task<ResultModel> GetOrderAsync(string orderId)
@@ -62,8 +64,9 @@ namespace Gorepo.Controllers
             return this.ResultSuccess(message);
         }
 
+
         [HttpPost]
-        public async Task<ResultModel> PostOrderAsync(WeChatOrder order)
+        public async Task<ResultModel> CreateOrderAsync(WeChatOrder order)
         {
             if (order.OrderAmount < 0.01m)
             {

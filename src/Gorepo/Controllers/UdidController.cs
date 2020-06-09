@@ -11,13 +11,15 @@ namespace Gorepo.Controllers
 
         private readonly IMemoryCache _memoryCache;
 
+
         public UdidController(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }
 
+
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult GetUdid(string id)
         {
             if (!string.IsNullOrWhiteSpace(id) &&
                 _memoryCache.TryGetValue<string>(string.Format(PlistKeyFormat, id), out string plistString))
