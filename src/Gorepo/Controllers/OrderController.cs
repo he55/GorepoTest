@@ -2,12 +2,10 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Gorepo.Data;
-using Gorepo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gorepo.Controllers
+namespace Gorepo
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Gorepo.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace Gorepo.Controllers
+namespace Gorepo
 {
     public class SourceController : ControllerBase
     {

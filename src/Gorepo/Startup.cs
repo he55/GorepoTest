@@ -1,7 +1,4 @@
 using System;
-using Gorepo.Common;
-using Gorepo.Data;
-using Gorepo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;

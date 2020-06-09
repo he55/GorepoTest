@@ -1,4 +1,4 @@
-﻿namespace Gorepo.Models
+﻿namespace Gorepo
 {
     public class WeChatMessage
     {

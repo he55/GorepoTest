@@ -3,9 +3,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
-using Gorepo.Models;
 
-namespace Gorepo.Services
+namespace Gorepo
 {
     public class WeChatMessageService
     {

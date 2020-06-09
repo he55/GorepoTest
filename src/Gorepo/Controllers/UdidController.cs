@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Gorepo.Controllers
+namespace Gorepo
 {
     [ApiController]
     [Route("api/[controller]")]
