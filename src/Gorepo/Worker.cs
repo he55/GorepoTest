@@ -37,9 +37,9 @@ namespace Gorepo
             string orderIdPrefix = _configuration.GetValue<string>("App:OrderIdPrefix");
 
             {
-                HWZContext context = _serviceProvider.CreateScope()
+                HWZGorepoContext context = _serviceProvider.CreateScope()
                     .ServiceProvider
-                    .GetRequiredService<HWZContext>();
+                    .GetRequiredService<HWZGorepoContext>();
 
                 await context.Database.EnsureCreatedAsync();
 
@@ -56,9 +56,9 @@ namespace Gorepo
 
                     if (messages.Length > 0)
                     {
-                        HWZContext context = _serviceProvider.CreateScope()
+                        HWZGorepoContext context = _serviceProvider.CreateScope()
                             .ServiceProvider
-                            .GetRequiredService<HWZContext>();
+                            .GetRequiredService<HWZGorepoContext>();
 
                         foreach (WeChatMessage message in messages)
                         {

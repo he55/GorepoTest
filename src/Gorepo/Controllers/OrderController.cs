@@ -11,11 +11,11 @@ namespace Gorepo
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly HWZContext _context;
+        private readonly HWZGorepoContext _context;
         private readonly HttpClient _httpClient;
 
 
-        public OrderController(HWZContext context,
+        public OrderController(HWZGorepoContext context,
             IHttpClientFactory httpClientFactory)
         {
             _context = context;

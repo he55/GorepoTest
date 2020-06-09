@@ -33,7 +33,7 @@ namespace Gorepo
             });
             services.AddSingleton<WeChatMessageService>();
 
-            services.AddDbContextPool<HWZContext>(options =>
+            services.AddDbContextPool<HWZGorepoContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("sqlite")));
 
             services.AddHostedService<Worker>();
