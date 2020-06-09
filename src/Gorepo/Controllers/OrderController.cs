@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Gorepo.Data;
 using Gorepo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gorepo.Controllers
 {
@@ -54,6 +55,11 @@ namespace Gorepo.Controllers
             if (order.OrderId.Length == 0)
             {
                 return this.ResultFail("参数错误，订单号长度不能为 0");
+            }
+
+            if (await _context.Orders.AnyAsync(o => o.OrderId == order.OrderId))
+            {
+                return this.ResultFail("订单号已经存在");
             }
 
             try
