@@ -43,7 +43,7 @@ namespace Gorepo
 
                 await context.Database.EnsureCreatedAsync();
 
-                _timestamp = context.Messages.Max(x => (int?)x.CreateTime) ?? 0;
+                _timestamp = context.Messages.Max(x => (int?)x.MessageCreateTime) ?? 0;
             }
 
             while (!stoppingToken.IsCancellationRequested)
@@ -70,14 +70,18 @@ namespace Gorepo
                             if (orderId.StartsWith(orderIdPrefix) &&
                                 decimal.TryParse(messageInfo["detail_content_value_0"].Replace("\uffe5", ""), out decimal amount))
                             {
+                                long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
                                 context.Messages.Add(new HWZMessage
                                 {
-                                    CreateTime = message.CreateTime,
-                                    ServerId = message.ServerId,
-                                    Message = message.Message,
-                                    PublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
+                                    MessageCreateTime = message.CreateTime,
+                                    MessageServerId = message.ServerId,
+                                    MessageContent = message.Message,
+                                    MessagePublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
                                     OrderId = orderId,
-                                    OrderAmount = amount
+                                    OrderAmount = amount,
+                                    CreateTime = timestamp,
+                                    UpdateTime = timestamp
                                 });
                             }
                         }

@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Gorepo.Data;
+using Gorepo.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gorepo.Controllers
@@ -21,7 +24,7 @@ namespace Gorepo.Controllers
         }
 
         [HttpGet("{orderId}")]
-        public ActionResult<object> GetOrder(string orderId)
+        public ResultModel GetOrder(string orderId)
         {
             var message = _context.Messages
                 .Where(m => m.OrderId == orderId)
@@ -34,15 +37,51 @@ namespace Gorepo.Controllers
 
             if (message == null)
             {
-                return NotFound();
+                return this.ResultFail("没有找到指定订单");
             }
-            return message;
+
+            return this.ResultSuccess(message);
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> PostOrderAsync(string orderId, decimal orderAmount)
+        public async Task<ResultModel> PostOrderAsync(Order order)
         {
-            return await _httpClient.GetStringAsync($"api/make_order?orderId={orderId}&orderAmount={orderAmount}");
+            if (order.OrderAmount < 0.01m)
+            {
+                return this.ResultFail("参数错误，金额不能小于 0.01 元");
+            }
+
+            if (order.OrderId.Length == 0)
+            {
+                return this.ResultFail("参数错误，订单号长度不能为 0");
+            }
+
+            try
+            {
+                string code = await _httpClient.GetStringAsync(
+                    $"api/make_order?orderId={order.OrderId}&orderAmount={order.OrderAmount}");
+
+                order.Code = code;
+
+                long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                _context.Orders.Add(new HWZOrder
+                {
+                    OrderId = order.OrderId,
+                    OrderAmount = order.OrderAmount,
+                    Code = order.Code,
+                    CreateTime = timestamp,
+                    UpdateTime = timestamp
+                });
+
+                await _context.SaveChangesAsync();
+
+                return this.ResultSuccess(order);
+            }
+            catch
+            {
+                return this.ResultFail("服务器内部错误，调用订单生成接口失败");
+            }
         }
     }
 }
