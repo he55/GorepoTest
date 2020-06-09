@@ -1,0 +1,58 @@
+﻿@page
+@model Gorepo.Pages.Order.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>HWZWeChatOrder</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderAmount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderAmount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderCode)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.IsOrderPay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.IsOrderPay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.CreateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.CreateTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.UpdateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.UpdateTime)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="HWZWeChatOrder.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

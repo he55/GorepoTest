@@ -1,0 +1,55 @@
+﻿@page
+@model Gorepo.Pages.Order.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>HWZWeChatOrder</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderAmount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderAmount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderCode)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.IsOrderPay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.IsOrderPay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.CreateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.CreateTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HWZWeChatOrder.UpdateTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HWZWeChatOrder.UpdateTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.HWZWeChatOrder.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
