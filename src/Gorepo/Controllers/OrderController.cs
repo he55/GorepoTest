@@ -31,7 +31,7 @@ namespace Gorepo
                 return this.ResultFail("参数错误，订单号长度不能为 0");
             }
 
-            var message = await _context.Messages
+            var message = await _context.WeChatMessages
                 .AsNoTracking()
                 .Where(m => m.OrderId == orderId)
                 .Select(m => new
@@ -47,13 +47,13 @@ namespace Gorepo
             }
 
 
-            HWZOrder order = await _context.Orders
+            HWZWeChatOrder order = await _context.WeChatOrders
                 .Where(o => o.OrderId == orderId)
                 .FirstOrDefaultAsync();
 
             if (order != null)
             {
-                order.IsPay = true;
+                order.IsOrderPay = true;
                 order.UpdateTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
                 await _context.SaveChangesAsync();
@@ -76,7 +76,7 @@ namespace Gorepo
                 return this.ResultFail("参数错误，订单号长度不能为 0");
             }
 
-            if (await _context.Orders.AnyAsync(o => o.OrderId == order.OrderId))
+            if (await _context.WeChatOrders.AnyAsync(o => o.OrderId == order.OrderId))
             {
                 return this.ResultFail("订单号已经存在");
             }
@@ -96,11 +96,11 @@ namespace Gorepo
 
             long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-            _context.Orders.Add(new HWZOrder
+            _context.WeChatOrders.Add(new HWZWeChatOrder
             {
                 OrderId = order.OrderId,
                 OrderAmount = order.OrderAmount,
-                Code = code,
+                OrderCode = code,
                 CreateTime = timestamp,
                 UpdateTime = timestamp
             });

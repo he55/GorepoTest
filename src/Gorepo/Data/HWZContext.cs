@@ -10,60 +10,61 @@ namespace Gorepo
         {
         }
 
-        public DbSet<HWZMessage> Messages { get; set; } = null!;
-        public DbSet<HWZOrder> Orders { get; set; } = null!;
+        public DbSet<HWZWeChatMessage> WeChatMessages { get; set; } = null!;
+        public DbSet<HWZWeChatOrder> WeChatOrders { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // HWZMessage
-            modelBuilder.Entity<HWZMessage>()
+            // HWZWeChatMessage
+            modelBuilder.Entity<HWZWeChatMessage>()
                 .HasIndex(m => m.Id)
                 .IsUnique();
 
-            modelBuilder.Entity<HWZMessage>()
-                .HasIndex(m => m.MessageServerId)
+            modelBuilder.Entity<HWZWeChatMessage>()
+                .HasIndex(m => m.MessageId)
                 .IsUnique();
 
-            modelBuilder.Entity<HWZMessage>()
+            modelBuilder.Entity<HWZWeChatMessage>()
                 .HasIndex(m => m.MessageCreateTime);
 
-            modelBuilder.Entity<HWZMessage>()
+            modelBuilder.Entity<HWZWeChatMessage>()
                 .HasIndex(m => m.OrderId)
                 .IsUnique();
 
 
-            // HWZOrder
-            modelBuilder.Entity<HWZOrder>()
+            // HWZWeChatOrder
+            modelBuilder.Entity<HWZWeChatOrder>()
                 .HasIndex(m => m.Id)
                 .IsUnique();
 
-            modelBuilder.Entity<HWZOrder>()
+            modelBuilder.Entity<HWZWeChatOrder>()
                 .HasIndex(m => m.OrderId)
                 .IsUnique();
         }
     }
 
-    public class HWZMessage
+    public class HWZModelBase
     {
         public int Id { get; set; }
-        public int MessageCreateTime { get; set; }
-        public string MessageServerId { get; set; } = null!;
-        public string MessageContent { get; set; } = null!;
-        public int MessagePublishTime { get; set; }
-        public string OrderId { get; set; } = null!;
-        public decimal OrderAmount { get; set; }
         public long CreateTime { get; set; }
         public long UpdateTime { get; set; }
     }
 
-    public class HWZOrder
+    public class HWZWeChatMessage : HWZModelBase
     {
-        public int Id { get; set; }
+        public int MessageCreateTime { get; set; }
+        public string MessageId { get; set; } = null!;
+        public string MessageContent { get; set; } = null!;
+        public int MessagePublishTime { get; set; }
         public string OrderId { get; set; } = null!;
         public decimal OrderAmount { get; set; }
-        public string Code { get; set; } = null!;
-        public bool IsPay { get; set; }
-        public long CreateTime { get; set; }
-        public long UpdateTime { get; set; }
+    }
+
+    public class HWZWeChatOrder : HWZModelBase
+    {
+        public string OrderId { get; set; } = null!;
+        public decimal OrderAmount { get; set; }
+        public string OrderCode { get; set; } = null!;
+        public bool IsOrderPay { get; set; }
     }
 }

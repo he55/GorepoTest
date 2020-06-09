@@ -43,7 +43,7 @@ namespace Gorepo
 
                 await context.Database.EnsureCreatedAsync();
 
-                _timestamp = context.Messages.Max(x => (int?)x.MessageCreateTime) ?? 0;
+                _timestamp = context.WeChatMessages.Max(x => (int?)x.MessageCreateTime) ?? 0;
             }
 
             while (!stoppingToken.IsCancellationRequested)
@@ -72,10 +72,10 @@ namespace Gorepo
                             {
                                 long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-                                context.Messages.Add(new HWZMessage
+                                context.WeChatMessages.Add(new HWZWeChatMessage
                                 {
                                     MessageCreateTime = message.CreateTime,
-                                    MessageServerId = message.ServerId,
+                                    MessageId = message.ServerId,
                                     MessageContent = message.Message,
                                     MessagePublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
                                     OrderId = orderId,
