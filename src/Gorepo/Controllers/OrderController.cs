@@ -54,6 +54,8 @@ namespace Gorepo.Controllers
             {
                 order.IsPay = true;
                 order.UpdateTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                await _context.SaveChangesAsync();
             }
 
             return this.ResultSuccess(message);
