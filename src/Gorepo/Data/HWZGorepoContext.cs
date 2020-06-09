@@ -36,7 +36,7 @@ namespace Gorepo
 
 
             // HWZWeChatOrder
-            modelBuilder.Entity<HWZWeChatMessage>()
+            modelBuilder.Entity<HWZWeChatOrder>()
                 .ToTable("WeChatOrder");
 
             modelBuilder.Entity<HWZWeChatOrder>()
