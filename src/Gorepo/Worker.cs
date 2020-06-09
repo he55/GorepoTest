@@ -57,7 +57,7 @@ namespace Gorepo
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "{message}", ex.Message);
+                    _logger.LogError(ex, "调用消息接口失败");
                     continue;
                 }
 
@@ -77,7 +77,7 @@ namespace Gorepo
                     Dictionary<string, string> messageInfo = _messageService.GetMessageInfo(message.Message);
 
                     string orderId = messageInfo["detail_content_value_1"];
-                    orderId = orderIdPrefix + message.ServerId;
+                    orderId = orderIdPrefix + message.MessageId;
 
                     if (orderId.StartsWith(orderIdPrefix) &&
                         decimal.TryParse(messageInfo["detail_content_value_0"].Replace("\uffe5", ""), out decimal amount))
@@ -87,7 +87,7 @@ namespace Gorepo
                         context.WeChatMessages.Add(new HWZWeChatMessage
                         {
                             MessageCreateTime = message.CreateTime,
-                            MessageId = message.ServerId,
+                            MessageId = message.MessageId,
                             MessageContent = message.Message,
                             MessagePublishTime = int.TryParse(messageInfo["header_pub_time"], out int publishTime) ? publishTime : 0,
                             OrderId = orderId,
@@ -96,7 +96,16 @@ namespace Gorepo
                             UpdateTime = timestamp
                         });
 
-                        await context.SaveChangesAsync();
+
+                        try
+                        {
+                            await context.SaveChangesAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "数据保存异常");
+                            break;
+                        }
                         _timestamp = message.CreateTime;
                     }
                 }
