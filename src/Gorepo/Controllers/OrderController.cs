@@ -44,7 +44,7 @@ namespace Gorepo.Controllers
         }
 
         [HttpPost]
-        public async Task<ResultModel> PostOrderAsync(Order order)
+        public async Task<ResultModel> PostOrderAsync(WeChatOrder order)
         {
             if (order.OrderAmount < 0.01m)
             {

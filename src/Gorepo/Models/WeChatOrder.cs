@@ -1,6 +1,6 @@
 ﻿namespace Gorepo.Models
 {
-    public class Order
+    public class WeChatOrder
     {
         public string OrderId { get; set; } = "";
         public decimal OrderAmount { get; set; }
