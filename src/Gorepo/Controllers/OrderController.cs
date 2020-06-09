@@ -46,6 +46,7 @@ namespace Gorepo.Controllers
                 return this.ResultFail("没有找到指定订单");
             }
 
+
             HWZOrder order = await _context.Orders
                 .Where(o => o.OrderId == orderId)
                 .FirstOrDefaultAsync();
@@ -79,32 +80,34 @@ namespace Gorepo.Controllers
                 return this.ResultFail("订单号已经存在");
             }
 
+            string code;
             try
             {
-                string code = await _httpClient.GetStringAsync(
+                code = await _httpClient.GetStringAsync(
                     $"api/make_order?orderId={order.OrderId}&orderAmount={order.OrderAmount}");
-
-                order.Code = code;
-
-                long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-                _context.Orders.Add(new HWZOrder
-                {
-                    OrderId = order.OrderId,
-                    OrderAmount = order.OrderAmount,
-                    Code = order.Code,
-                    CreateTime = timestamp,
-                    UpdateTime = timestamp
-                });
-
-                await _context.SaveChangesAsync();
-
-                return this.ResultSuccess(order);
             }
             catch
             {
                 return this.ResultFail("服务器内部错误，调用订单生成接口失败");
             }
+
+
+            long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+            _context.Orders.Add(new HWZOrder
+            {
+                OrderId = order.OrderId,
+                OrderAmount = order.OrderAmount,
+                Code = code,
+                CreateTime = timestamp,
+                UpdateTime = timestamp
+            });
+
+            await _context.SaveChangesAsync();
+
+
+            order.Code = code;
+            return this.ResultSuccess(order);
         }
     }
 }
