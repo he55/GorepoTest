@@ -66,5 +66,7 @@ namespace Gorepo.Data
         public bool IsPay { get; set; }
         public long CreateTime { get; set; }
         public long UpdateTime { get; set; }
+
+        public HWZMessage? Message { get; set; }
     }
 }
