@@ -17,6 +17,9 @@ namespace Gorepo
         {
             // HWZWeChatMessage
             modelBuilder.Entity<HWZWeChatMessage>()
+                .ToTable("WeChatMessage");
+
+            modelBuilder.Entity<HWZWeChatMessage>()
                 .HasIndex(m => m.Id)
                 .IsUnique();
 
@@ -33,6 +36,9 @@ namespace Gorepo
 
 
             // HWZWeChatOrder
+            modelBuilder.Entity<HWZWeChatMessage>()
+                .ToTable("WeChatOrder");
+
             modelBuilder.Entity<HWZWeChatOrder>()
                 .HasIndex(m => m.Id)
                 .IsUnique();
