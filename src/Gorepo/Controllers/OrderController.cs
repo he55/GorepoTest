@@ -24,20 +24,36 @@ namespace Gorepo.Controllers
         }
 
         [HttpGet("{orderId}")]
-        public ResultModel GetOrder(string orderId)
+        public async Task<ResultModel> GetOrderAsync(string orderId)
         {
-            var message = _context.Messages
+            if (orderId.Length == 0)
+            {
+                return this.ResultFail("参数错误，订单号长度不能为 0");
+            }
+
+            var message = await _context.Messages
+                .AsNoTracking()
                 .Where(m => m.OrderId == orderId)
                 .Select(m => new
                 {
                     m.OrderId,
                     m.OrderAmount
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (message == null)
             {
                 return this.ResultFail("没有找到指定订单");
+            }
+
+            HWZOrder order = await _context.Orders
+                .Where(o => o.OrderId == orderId)
+                .FirstOrDefaultAsync();
+
+            if (order != null)
+            {
+                order.IsPay = true;
+                order.UpdateTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             }
 
             return this.ResultSuccess(message);

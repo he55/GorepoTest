@@ -63,6 +63,7 @@ namespace Gorepo.Data
         public string OrderId { get; set; } = null!;
         public decimal OrderAmount { get; set; }
         public string Code { get; set; } = null!;
+        public bool IsPay { get; set; }
         public long CreateTime { get; set; }
         public long UpdateTime { get; set; }
     }
