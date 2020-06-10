@@ -21,7 +21,7 @@
                 订单金额
             </th>
             <th>
-                是否支付
+                支付状态
             </th>
             <th>
                 创建时间
@@ -40,7 +40,14 @@
                     @item.OrderAmount.ToString("F2")
                 </td>
                 <td>
-                    <input @(item.IsOrderPay ? "checked=\"checked\"" : "") class="check-box" disabled="disabled" type="checkbox" />
+                    @if (item.IsOrderPay)
+                    {
+                        <span style="color:green;">已支付</span>
+                    }
+                    else
+                    {
+                        <span>未支付</span>
+                    }
                 </td>
                 <td>
                     @DateTimeOffset.FromUnixTimeMilliseconds(item.CreateTime).LocalDateTime

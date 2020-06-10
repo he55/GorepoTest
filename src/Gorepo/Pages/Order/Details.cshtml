@@ -24,16 +24,23 @@
             @Model.HWZWeChatOrder.OrderAmount.ToString("F2")
         </dd>
         <dt class="col-sm-2">
-            支付码
+            Code
         </dt>
         <dd class="col-sm-10">
             @Model.HWZWeChatOrder.OrderCode
         </dd>
         <dt class="col-sm-2">
-            是否支付
+            支付状态
         </dt>
         <dd class="col-sm-10">
-            <input @(Model.HWZWeChatOrder.IsOrderPay ? "checked=\"checked\"" : "") class="check-box" disabled="disabled" type="checkbox" />
+            @if (Model.HWZWeChatOrder.IsOrderPay)
+            {
+                <span style="color:green;">已支付</span>
+            }
+            else
+            {
+                <span>未支付</span>
+            }
         </dd>
         <dt class="col-sm-2">
             创建时间
@@ -50,5 +57,5 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">返回列表</a>
 </div>

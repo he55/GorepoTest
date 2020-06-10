@@ -61,10 +61,12 @@ namespace Gorepo
                 ContentTypeProvider = new HWZFileExtensionContentTypeProvider()
             });
 
+            /*
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
                 Formatter = app.ApplicationServices.GetService<IDirectoryFormatter>()
             });
+            */
 
             app.UseRouting();
 
