@@ -73,12 +73,10 @@ namespace Gorepo
                 Dictionary<string, string> messageInfo = _wechatService.GetMessageInfo(message.Message);
 
                 string orderId = messageInfo["detail_content_value_1"];
-                orderId = _orderIdPrefix + message.MessageId;
-
 
                 if (!orderId.StartsWith(_orderIdPrefix))
                 {
-                    _logger.LogWarning("消息 Id 不是指定前缀");
+                    _logger.LogInformation("消息 Id 不是指定前缀");
                     continue;
                 }
 
