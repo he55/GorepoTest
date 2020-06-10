@@ -39,11 +39,7 @@ namespace Gorepo
 
             if (!_flag)
             {
-                // TODO: Remove
-                await context.Database.EnsureCreatedAsync();
-
                 _flag = true;
-
                 _timestamp = await context.WeChatMessages.MaxAsync(x => (int?)x.MessageCreateTime) ?? 0;
                 _orderIdPrefix = _configuration.GetValue<string>("App:OrderIdPrefix");
             }
