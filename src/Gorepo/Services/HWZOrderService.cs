@@ -39,6 +39,7 @@ namespace Gorepo
 
             if (!_flag)
             {
+                // TODO: Remove
                 await context.Database.EnsureCreatedAsync();
 
                 _flag = true;
@@ -62,7 +63,7 @@ namespace Gorepo
 
             if (messages.Length == 0)
             {
-                _logger.LogWarning("消息数组长度为 0");
+                _logger.LogInformation("消息数组长度为 0");
                 return;
             }
 
@@ -89,6 +90,7 @@ namespace Gorepo
                 if (order == null)
                 {
                     _logger.LogWarning("找不到对应订单");
+                    _timestamp = message.CreateTime;
                     continue;
                 }
 
@@ -137,7 +139,6 @@ namespace Gorepo
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "消息数据保存异常");
-                    return;
                 }
                 _timestamp = message.CreateTime;
             }

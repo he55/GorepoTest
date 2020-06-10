@@ -9,10 +9,12 @@ namespace Gorepo
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly HWZOrderService _orderService;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, HWZOrderService orderService)
         {
             _logger = logger;
+            _orderService = orderService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,6 +24,7 @@ namespace Gorepo
                 await Task.Delay(10_000, stoppingToken);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                await _orderService.SaveOrderAsync();
             }
         }
     }
