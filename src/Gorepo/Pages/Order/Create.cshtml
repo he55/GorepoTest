@@ -47,7 +47,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="error" style="color:red;"></div>
+                <div id="error" style="color:red"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
@@ -71,7 +71,6 @@
                 <div style="text-align:-webkit-center">
                     <div id="orderCode"></div>
                     <br />
-
                     <div id="qrcode"></div>
                 </div>
             </div>
@@ -117,6 +116,9 @@
                     return
                 }
 
+                qrcode.innerHTML = ''
+                orderCode.innerHTML = '￥ ' + json.result.orderAmount.toFixed(2)
+
                 new QRCode(qrcode, {
                     text: json.result.orderCode,
                     width: 256,
@@ -126,10 +128,8 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
 
-                orderCode.innerHTML = json.result.orderCode
                 $('#qrcodeModal').modal()
             }).catch(ex => {
-                console.log('parsing failed', ex)
                 error.innerHTML = '请求失败'
                 $('#tipModal').modal()
             })
