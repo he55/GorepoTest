@@ -45,18 +45,6 @@ namespace Gorepo
             }
 
 
-            HWZWeChatOrder order = await _context.WeChatOrders
-                .Where(o => o.OrderId == orderId)
-                .FirstOrDefaultAsync();
-
-            if (order != null)
-            {
-                order.IsOrderPay = true;
-                order.UpdateTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-                await _context.SaveChangesAsync();
-            }
-
             return this.ResultSuccess(message);
         }
 
