@@ -6,8 +6,6 @@
 }
 
 <h1>创建订单</h1>
-
-<h4></h4>
 <hr />
 
 <div class="row">
@@ -69,7 +67,7 @@
             </div>
             <div class="modal-body">
                 <div style="text-align:-webkit-center">
-                    <div id="orderCode"></div>
+                    <div id="amount"></div>
                     <br />
                     <div id="qrcode"></div>
                 </div>
@@ -90,7 +88,7 @@
 
     <script>
         let error = document.getElementById('error')
-        let orderCode = document.getElementById("orderCode")
+        let amount = document.getElementById("amount")
         let qrcode = document.getElementById("qrcode")
 
         document.getElementById('createOrder').addEventListener('click', () => {
@@ -117,7 +115,7 @@
                 }
 
                 qrcode.innerHTML = ''
-                orderCode.innerHTML = '￥ ' + json.result.orderAmount.toFixed(2)
+                amount.innerHTML = '￥ ' + json.result.orderAmount.toFixed(2)
 
                 new QRCode(qrcode, {
                     text: json.result.orderCode,
