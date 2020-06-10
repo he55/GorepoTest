@@ -14,7 +14,7 @@ namespace Gorepo
         private readonly ILogger<HWZOrderService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
-        private readonly WeChatMessageService _messageService;
+        private readonly WeChatService _wechatService;
 
         private bool _flag;
         private int _timestamp;
@@ -23,12 +23,12 @@ namespace Gorepo
         public HWZOrderService(ILogger<HWZOrderService> logger,
             IConfiguration configuration,
             IServiceProvider serviceProvider,
-            WeChatMessageService messageService)
+            WeChatService wechatService)
         {
             _logger = logger;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
-            _messageService = messageService;
+            _wechatService = wechatService;
         }
 
         public async Task SaveOrderAsync()
@@ -52,7 +52,7 @@ namespace Gorepo
             WeChatMessage[] messages;
             try
             {
-                messages = await _messageService.GetWeChatMessagesAsync(_timestamp);
+                messages = await _wechatService.GetMessagesAsync(_timestamp);
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace Gorepo
 
             foreach (WeChatMessage message in messages)
             {
-                Dictionary<string, string> messageInfo = _messageService.GetMessageInfo(message.Message);
+                Dictionary<string, string> messageInfo = _wechatService.GetMessageInfo(message.Message);
 
                 string orderId = messageInfo["detail_content_value_1"];
                 orderId = _orderIdPrefix + message.MessageId;

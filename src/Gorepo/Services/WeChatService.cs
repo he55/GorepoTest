@@ -6,13 +6,25 @@ using System.Xml;
 
 namespace Gorepo
 {
-    public class WeChatMessageService
+    public class WeChatService
     {
         private readonly HttpClient _httpClient;
 
-        public WeChatMessageService(IHttpClientFactory httpClientFactory)
+        public WeChatService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("wed");
+        }
+
+        public async Task<WeChatMessage[]> GetMessagesAsync(int timestamp)
+        {
+            return await JsonSerializer.DeserializeAsync<WeChatMessage[]>(
+                await _httpClient.GetStreamAsync($"api/messages?t={timestamp}"),
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task<string> CreateOrderAsync(string orderId, decimal orderAmount)
+        {
+            return await _httpClient.GetStringAsync($"api/make_order?orderId={orderId}&orderAmount={orderAmount}");
         }
 
         public Dictionary<string, string> GetMessageInfo(string xmlMessage)
@@ -58,13 +70,6 @@ namespace Gorepo
             };
 
             return messageInfo;
-        }
-
-        public async Task<WeChatMessage[]> GetWeChatMessagesAsync(int timestamp)
-        {
-            return await JsonSerializer.DeserializeAsync<WeChatMessage[]>(
-                await _httpClient.GetStreamAsync($"api/messages?t={timestamp}"),
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
     }
 }

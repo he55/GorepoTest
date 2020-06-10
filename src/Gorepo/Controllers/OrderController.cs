@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +11,12 @@ namespace Gorepo
     public class OrderController : ControllerBase
     {
         private readonly HWZGorepoContext _context;
-        private readonly HttpClient _httpClient;
+        private readonly WeChatService _wechatService;
 
-        public OrderController(HWZGorepoContext context,
-            IHttpClientFactory httpClientFactory)
+        public OrderController(HWZGorepoContext context, WeChatService wechatService)
         {
             _context = context;
-            _httpClient = httpClientFactory.CreateClient("wed");
+            _wechatService = wechatService;
         }
 
         [HttpGet("{orderId}")]
@@ -29,23 +27,15 @@ namespace Gorepo
                 return this.ResultFail("参数错误，订单号长度不能为 0");
             }
 
-            var message = await _context.WeChatMessages
-                .AsNoTracking()
+            HWZWeChatOrder order = await _context.WeChatOrders
                 .Where(m => m.OrderId == orderId)
-                .Select(m => new
-                {
-                    m.OrderId,
-                    m.OrderAmount
-                })
                 .FirstOrDefaultAsync();
 
-            if (message == null)
+            if (order == null)
             {
                 return this.ResultFail("没有找到指定订单");
             }
-
-
-            return this.ResultSuccess(message);
+            return this.ResultSuccess(order);
         }
 
         [HttpPost]
@@ -70,8 +60,7 @@ namespace Gorepo
             string orderCode;
             try
             {
-                orderCode = await _httpClient.GetStringAsync(
-                    $"api/make_order?orderId={order.OrderId}&orderAmount={order.OrderAmount}");
+                orderCode = await _wechatService.CreateOrderAsync(order.OrderId, order.OrderAmount);
             }
             catch
             {
