@@ -31,8 +31,14 @@
     </div>
 </div>
 
-<div id="message"></div>
+<div id="error" style="color:red;"></div>
+<br />
+
+<div id="orderCode"></div>
+<br />
+
 <div id="qrcode"></div>
+<br />
 
 <div>
     <a asp-page="Index">Back to List</a>
@@ -44,10 +50,15 @@
     <script src="~/lib/qrcodejs/qrcode.min.js"></script>
 
     <script>
-        var message = document.getElementById('message')
-        var qrcode = document.getElementById("qrcode")
+        let error = document.getElementById('error')
+        let orderCode = document.getElementById("orderCode")
+        let qrcode = document.getElementById("qrcode")
 
         document.getElementById('createOrder').addEventListener('click', () => {
+            error.innerHTML = ''
+            orderCode.innerHTML = ''
+            qrcode.innerHTML = ''
+
             fetch('/api/order', {
                 method: 'POST',
                 headers: {
@@ -57,16 +68,15 @@
                     orderId: document.getElementById('orderId').value,
                     orderAmount: parseFloat(document.getElementById('orderAmount').value),
                 })
-            }).then(function (response) {
+            }).then(response => {
                 return response.json()
-            }).then(function (json) {
+            }).then(json => {
                 if (!json.success) {
-                    message.innerHTML = json.message
+                    error.innerHTML = json.message
                     return
                 }
 
-                message.innerHTML = ''
-                qrcode.innerHTML = ''
+                orderCode.innerHTML = json.result.orderCode
 
                 new QRCode(qrcode, {
                     text: json.result.orderCode,
@@ -76,10 +86,9 @@
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
                 });
-
-            }).catch(function (ex) {
+            }).catch(ex => {
                 console.log('parsing failed', ex)
-                message.innerHTML = '请求错误'
+                error.innerHTML = '请求失败'
             })
         })
     </script>
