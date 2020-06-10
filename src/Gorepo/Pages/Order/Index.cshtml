@@ -2,65 +2,54 @@
 @model Gorepo.Pages.Order.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "订单";
 }
 
-<h1>Index</h1>
+<h1>订单</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create">创建订单</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HWZWeChatOrder[0].OrderId)
+                订单号
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HWZWeChatOrder[0].OrderAmount)
+                订单金额
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HWZWeChatOrder[0].OrderCode)
+                是否支付
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HWZWeChatOrder[0].IsOrderPay)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HWZWeChatOrder[0].CreateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HWZWeChatOrder[0].UpdateTime)
+                创建时间
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.HWZWeChatOrder) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsOrderPay)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdateTime)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.HWZWeChatOrder)
+        {
+            <tr>
+                <td>
+                    @item.OrderId
+                </td>
+                <td>
+                    @item.OrderAmount.ToString("F2")
+                </td>
+                <td>
+                    <input @(item.IsOrderPay ? "checked=\"checked\"" : "") class="check-box" disabled="disabled" type="checkbox" />
+                </td>
+                <td>
+                    @DateTimeOffset.FromUnixTimeMilliseconds(item.CreateTime).LocalDateTime
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id">明细</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">删除</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

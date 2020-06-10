@@ -2,54 +2,53 @@
 @model Gorepo.Pages.Order.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "订单明细";
 }
 
-<h1>Details</h1>
+<h1>订单明细</h1>
 
 <div>
-    <h4>HWZWeChatOrder</h4>
+    <h4>@Model.HWZWeChatOrder.OrderId</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderId)
+            订单号
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderId)
+            @Model.HWZWeChatOrder.OrderId
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderAmount)
+            订单金额
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderAmount)
+            @Model.HWZWeChatOrder.OrderAmount.ToString("F2")
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HWZWeChatOrder.OrderCode)
+            支付码
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HWZWeChatOrder.OrderCode)
+            @Model.HWZWeChatOrder.OrderCode
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HWZWeChatOrder.IsOrderPay)
+            是否支付
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HWZWeChatOrder.IsOrderPay)
+            <input @(Model.HWZWeChatOrder.IsOrderPay ? "checked=\"checked\"" : "") class="check-box" disabled="disabled" type="checkbox" />
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HWZWeChatOrder.CreateTime)
+            创建时间
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HWZWeChatOrder.CreateTime)
+            @DateTimeOffset.FromUnixTimeMilliseconds(Model.HWZWeChatOrder.CreateTime).LocalDateTime
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HWZWeChatOrder.UpdateTime)
+            更新时间
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HWZWeChatOrder.UpdateTime)
+            @DateTimeOffset.FromUnixTimeMilliseconds(Model.HWZWeChatOrder.UpdateTime).LocalDateTime
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.HWZWeChatOrder.Id">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>
