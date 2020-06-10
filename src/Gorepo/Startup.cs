@@ -26,15 +26,16 @@ namespace Gorepo
 
             services.AddSingleton<IDirectoryFormatter, HWZDirectoryFormatter>();
 
+            services.AddDbContextPool<HWZGorepoContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("sqlite")));
+
             services.AddHttpClient("wed", httpClient =>
             {
                 httpClient.BaseAddress = new Uri(Configuration.GetValue<string>("App:wed"));
                 httpClient.Timeout = TimeSpan.FromSeconds(3.0);
             });
             services.AddSingleton<WeChatMessageService>();
-
-            services.AddDbContextPool<HWZGorepoContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("sqlite")));
+            services.AddSingleton<HWZOrderService>();
 
             services.AddHostedService<Worker>();
         }

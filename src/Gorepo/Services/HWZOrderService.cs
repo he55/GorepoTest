@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Gorepo
 {
-    public class OrderService
+    public class HWZOrderService
     {
-        private readonly ILogger<OrderService> _logger;
+        private readonly ILogger<HWZOrderService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly WeChatMessageService _messageService;
@@ -20,7 +20,7 @@ namespace Gorepo
         private int _timestamp;
         private string _orderIdPrefix = "";
 
-        public OrderService(ILogger<OrderService> logger,
+        public HWZOrderService(ILogger<HWZOrderService> logger,
             IConfiguration configuration,
             IServiceProvider serviceProvider,
             WeChatMessageService messageService)
