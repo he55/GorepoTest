@@ -31,6 +31,7 @@
     </div>
 </div>
 
+<div id="message"></div>
 <div id="qrcode"></div>
 
 <div>
@@ -40,7 +41,12 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+    <script src="~/lib/qrcodejs/qrcode.min.js"></script>
+
     <script>
+        var message = document.getElementById('message')
+        var qrcode = document.getElementById("qrcode")
+
         document.getElementById('createOrder').addEventListener('click', () => {
             fetch('/api/order', {
                 method: 'POST',
@@ -55,15 +61,17 @@
                 return response.json()
             }).then(function (json) {
                 if (!json.success) {
-                    console.error(json.message)
+                    message.innerHTML = json.message
                     return
                 }
-                console.log(json.result)
 
-                var qrcode = new QRCode(document.getElementById("qrcode"), {
+                message.innerHTML = ''
+                qrcode.innerHTML = ''
+
+                new QRCode(qrcode, {
                     text: json.result.orderCode,
-                    width: 128,
-                    height: 128,
+                    width: 256,
+                    height: 256,
                     colorDark: "#000000",
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
@@ -71,6 +79,7 @@
 
             }).catch(function (ex) {
                 console.log('parsing failed', ex)
+                message.innerHTML = '请求错误'
             })
         })
     </script>
