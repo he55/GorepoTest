@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Gorepo
 {
-    public class HWZOrderService
+    public class OrderService
     {
-        private readonly ILogger<HWZOrderService> _logger;
+        private readonly ILogger<OrderService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
         private readonly WeChatService _wechatService;
@@ -20,7 +20,7 @@ namespace Gorepo
         private int _timestamp;
         private string _orderIdPrefix = "";
 
-        public HWZOrderService(ILogger<HWZOrderService> logger,
+        public OrderService(ILogger<OrderService> logger,
             IConfiguration configuration,
             IServiceProvider serviceProvider,
             WeChatService wechatService)
@@ -33,9 +33,9 @@ namespace Gorepo
 
         public async Task SaveOrderAsync()
         {
-            HWZGorepoContext context = _serviceProvider.CreateScope()
+            GorepoContext context = _serviceProvider.CreateScope()
                 .ServiceProvider
-                .GetRequiredService<HWZGorepoContext>();
+                .GetRequiredService<GorepoContext>();
 
             if (!_flag)
             {

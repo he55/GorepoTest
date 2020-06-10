@@ -7,9 +7,9 @@ namespace Gorepo.Pages.Order
 {
     public class DetailsModel : PageModel
     {
-        private readonly HWZGorepoContext _context;
+        private readonly GorepoContext _context;
 
-        public DetailsModel(HWZGorepoContext context)
+        public DetailsModel(GorepoContext context)
         {
             _context = context;
         }

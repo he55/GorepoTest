@@ -26,7 +26,7 @@ namespace Gorepo
 
             services.AddSingleton<IDirectoryFormatter, HWZDirectoryFormatter>();
 
-            services.AddDbContextPool<HWZGorepoContext>(options =>
+            services.AddDbContextPool<GorepoContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("sqlite")));
 
             services.AddHttpClient("wed", httpClient =>
@@ -35,7 +35,7 @@ namespace Gorepo
                 httpClient.Timeout = TimeSpan.FromSeconds(3.0);
             });
             services.AddSingleton<WeChatService>();
-            services.AddSingleton<HWZOrderService>();
+            services.AddSingleton<OrderService>();
 
             services.AddHostedService<Worker>();
         }

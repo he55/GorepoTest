@@ -10,10 +10,10 @@ namespace Gorepo
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly HWZGorepoContext _context;
+        private readonly GorepoContext _context;
         private readonly WeChatService _wechatService;
 
-        public OrderController(HWZGorepoContext context, WeChatService wechatService)
+        public OrderController(GorepoContext context, WeChatService wechatService)
         {
             _context = context;
             _wechatService = wechatService;

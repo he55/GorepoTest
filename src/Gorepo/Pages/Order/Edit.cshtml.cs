@@ -8,9 +8,9 @@ namespace Gorepo.Pages.Order
 {
     public class EditModel : PageModel
     {
-        private readonly HWZGorepoContext _context;
+        private readonly GorepoContext _context;
 
-        public EditModel(HWZGorepoContext context)
+        public EditModel(GorepoContext context)
         {
             _context = context;
         }

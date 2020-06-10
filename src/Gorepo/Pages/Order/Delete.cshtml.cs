@@ -7,9 +7,9 @@ namespace Gorepo.Pages.Order
 {
     public class DeleteModel : PageModel
     {
-        private readonly HWZGorepoContext _context;
+        private readonly GorepoContext _context;
 
-        public DeleteModel(HWZGorepoContext context)
+        public DeleteModel(GorepoContext context)
         {
             _context = context;
         }

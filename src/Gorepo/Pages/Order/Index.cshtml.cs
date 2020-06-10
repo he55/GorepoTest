@@ -7,9 +7,9 @@ namespace Gorepo.Pages.Order
 {
     public class IndexModel : PageModel
     {
-        private readonly HWZGorepoContext _context;
+        private readonly GorepoContext _context;
 
-        public IndexModel(HWZGorepoContext context)
+        public IndexModel(GorepoContext context)
         {
             _context = context;
         }

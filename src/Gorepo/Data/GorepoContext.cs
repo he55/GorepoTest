@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gorepo
 {
-    public class HWZGorepoContext : DbContext
+    public class GorepoContext : DbContext
     {
-        public HWZGorepoContext([NotNull] DbContextOptions<HWZGorepoContext> options)
+        public GorepoContext([NotNull] DbContextOptions<GorepoContext> options)
             : base(options)
         {
         }

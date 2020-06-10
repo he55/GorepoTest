@@ -6,9 +6,9 @@ namespace Gorepo.Pages.Order
 {
     public class CreateModel : PageModel
     {
-        private readonly HWZGorepoContext _context;
+        private readonly GorepoContext _context;
 
-        public CreateModel(HWZGorepoContext context)
+        public CreateModel(GorepoContext context)
         {
             _context = context;
         }

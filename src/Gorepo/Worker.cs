@@ -9,9 +9,9 @@ namespace Gorepo
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly HWZOrderService _orderService;
+        private readonly OrderService _orderService;
 
-        public Worker(ILogger<Worker> logger, HWZOrderService orderService)
+        public Worker(ILogger<Worker> logger, OrderService orderService)
         {
             _logger = logger;
             _orderService = orderService;
