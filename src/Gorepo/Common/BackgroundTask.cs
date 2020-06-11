@@ -11,7 +11,7 @@ namespace Gorepo
 
         protected abstract Task ExecuteAsync(CancellationToken stoppingToken);
 
-        public void RequestBackgroundTask()
+        public void RequestExecute()
         {
             // 不要锁住
             if (_runTaskFlag)
