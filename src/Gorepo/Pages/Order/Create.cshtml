@@ -34,6 +34,32 @@
 </div>
 
 
+<!-- qrcodeModal -->
+<div class="modal fade" id="qrcodeModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="qrcodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" style="width:400px">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrcodeModalLabel">扫码支付</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align:-webkit-center">
+                    <div id="amount"></div>
+                    <br />
+                    <div id="qrcode"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button id="isPay" type="button" class="btn btn-primary">我已支付</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- tipModal -->
 <div class="modal fade" id="tipModal" tabindex="-1" role="dialog" aria-labelledby="tipModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -55,46 +81,23 @@
 </div>
 
 
-<!-- qrcodeModal -->
-<div class="modal fade" id="qrcodeModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="qrcodeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content" style="width:400px">
-            <div class="modal-header">
-                <h5 class="modal-title" id="qrcodeModalLabel">扫码支付</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div style="text-align:-webkit-center">
-                    <div id="amount"></div>
-                    <br />
-                    <div id="qrcode"></div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">我已支付</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script src="~/lib/qrcodejs/qrcode.min.js"></script>
-
     <script>
         let error = document.getElementById('error')
         let amount = document.getElementById("amount")
         let qrcode = document.getElementById("qrcode")
 
+        var orderId
+
         document.getElementById('createOrder').addEventListener('click', () => {
             if (!$('form').valid()) {
                 return
             }
+
+            orderId = document.getElementById('orderId').value
 
             fetch('/api/order', {
                 method: 'POST',
@@ -102,7 +105,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    orderId: document.getElementById('orderId').value,
+                    orderId: orderId,
                     orderAmount: parseFloat(document.getElementById('orderAmount').value),
                 })
             }).then(response => {
@@ -131,6 +134,24 @@
                 error.innerHTML = '请求失败'
                 $('#tipModal').modal()
             })
+        })
+
+
+        document.getElementById('isPay').addEventListener('click', () => {
+            fetch('/api/order/' + orderId)
+                .then(response => {
+                    return response.json()
+                }).then(json => {
+                    if (!json.success) {
+                        error.innerHTML = json.message
+                        $('#tipModal').modal()
+                        return
+                    }
+                    console.log(json)
+                }).catch(ex => {
+                    error.innerHTML = '请求失败'
+                    $('#tipModal').modal()
+                })
         })
     </script>
 }
