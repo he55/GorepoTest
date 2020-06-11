@@ -31,8 +31,7 @@ namespace Gorepo
                 .HasIndex(m => m.MessageCreateTime);
 
             modelBuilder.Entity<HWZWeChatMessage>()
-                .HasIndex(m => m.OrderId)
-                .IsUnique();
+                .HasIndex(m => m.OrderId);
 
 
             // HWZWeChatOrder
