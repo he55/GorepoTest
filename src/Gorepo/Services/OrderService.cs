@@ -32,7 +32,7 @@ namespace Gorepo
             _wechatService = wechatService;
         }
 
-        private async Task SaveOrderAsync()
+        private async Task PullOrderAsync()
         {
             GorepoContext context = _serviceProvider.CreateScope()
                 .ServiceProvider
@@ -128,7 +128,7 @@ namespace Gorepo
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await SaveOrderAsync();
+            await PullOrderAsync();
         }
     }
 }
