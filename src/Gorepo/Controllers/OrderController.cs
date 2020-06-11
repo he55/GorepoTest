@@ -12,11 +12,16 @@ namespace Gorepo
     {
         private readonly GorepoContext _context;
         private readonly WeChatService _wechatService;
+        private readonly OrderService _orderService;
 
-        public OrderController(GorepoContext context, WeChatService wechatService)
+        public OrderController(
+            GorepoContext context,
+            WeChatService wechatService,
+            OrderService orderService)
         {
             _context = context;
             _wechatService = wechatService;
+            _orderService = orderService;
         }
 
         [HttpGet("{orderId}")]
@@ -33,6 +38,7 @@ namespace Gorepo
 
             if (order == null)
             {
+                _orderService.RequestTask();
                 return this.ResultFail("没有找到指定订单");
             }
             return this.ResultSuccess(order);

@@ -24,7 +24,7 @@ namespace Gorepo
                 await Task.Delay(10_000, stoppingToken);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await _orderService.SaveOrderAsync();
+                _orderService.RequestTask();
             }
         }
     }

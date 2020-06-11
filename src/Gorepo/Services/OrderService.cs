@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Gorepo
 {
-    public class OrderService
+    public class OrderService : BackgroundTask
     {
         private readonly ILogger<OrderService> _logger;
         private readonly IConfiguration _configuration;
@@ -31,7 +32,7 @@ namespace Gorepo
             _wechatService = wechatService;
         }
 
-        public async Task SaveOrderAsync()
+        private async Task SaveOrderAsync()
         {
             GorepoContext context = _serviceProvider.CreateScope()
                 .ServiceProvider
@@ -123,6 +124,11 @@ namespace Gorepo
                     _logger.LogError(ex, "数据保存异常");
                 }
             }
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            await SaveOrderAsync();
         }
     }
 }
