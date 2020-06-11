@@ -38,7 +38,7 @@ namespace Gorepo
 
             if (order == null)
             {
-                _orderService.RequestTask();
+                _orderService.RequestBackgroundTask();
                 return this.ResultFail("没有找到指定订单");
             }
             return this.ResultSuccess(order);
