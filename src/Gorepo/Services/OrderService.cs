@@ -66,6 +66,8 @@ namespace Gorepo
 
             foreach (WeChatMessage message in messages)
             {
+                _timestamp = message.CreateTime;
+
                 Dictionary<string, string> messageInfo = _wechatService.GetMessageInfo(message.Message);
 
                 string orderId = messageInfo["detail_content_value_1"];
@@ -84,25 +86,7 @@ namespace Gorepo
                 if (order == null)
                 {
                     _logger.LogWarning("找不到对应订单");
-                    _timestamp = message.CreateTime;
                     continue;
-                }
-
-
-                long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-                order.IsOrderPay = true;
-                order.UpdateTime = timestamp;
-
-                try
-                {
-                    await context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "订单数据保存异常");
-                    _timestamp = message.CreateTime;
-                    return;
                 }
 
 
@@ -112,6 +96,11 @@ namespace Gorepo
                     continue;
                 }
 
+
+                long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                order.IsOrderPay = true;
+                order.UpdateTime = timestamp;
 
                 context.WeChatMessages.Add(new HWZWeChatMessage
                 {
@@ -125,16 +114,14 @@ namespace Gorepo
                     UpdateTime = timestamp
                 });
 
-
                 try
                 {
                     await context.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "消息数据保存异常");
+                    _logger.LogError(ex, "数据保存异常");
                 }
-                _timestamp = message.CreateTime;
             }
         }
     }
