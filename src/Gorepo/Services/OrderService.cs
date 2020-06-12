@@ -100,7 +100,7 @@ namespace Gorepo
 
                 long timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-                order.IsOrderPay = true;
+                order.IsPay = true;
                 order.UpdateTime = timestamp;
 
                 context.WeChatMessages.Add(new HWZWeChatMessage

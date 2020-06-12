@@ -70,6 +70,6 @@ namespace Gorepo
         public string OrderId { get; set; } = null!;
         public decimal OrderAmount { get; set; }
         public string OrderCode { get; set; } = null!;
-        public bool IsOrderPay { get; set; }
+        public bool IsPay { get; set; }
     }
 }
