@@ -21,7 +21,7 @@ namespace Gorepo
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(10_000, stoppingToken);
+                await Task.Delay(100_000, stoppingToken);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 _orderService.RequestExecute();
