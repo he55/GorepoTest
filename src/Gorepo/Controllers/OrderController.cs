@@ -24,6 +24,13 @@ namespace Gorepo
             _orderService = orderService;
         }
 
+        [HttpGet("/pull_order")]
+        public ResultModel PullOrder()
+        {
+            _orderService.RequestExecute();
+            return this.ResultSuccess("ok");
+        }
+
         [HttpGet("{orderId}")]
         public async Task<ResultModel> GetOrderAsync(string orderId)
         {
@@ -38,7 +45,6 @@ namespace Gorepo
 
             if (order == null)
             {
-                _orderService.RequestExecute();
                 return this.ResultFail("没有找到指定订单");
             }
             return this.ResultSuccess(order);
