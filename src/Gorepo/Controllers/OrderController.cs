@@ -49,6 +49,11 @@ namespace Gorepo
                 .Where(m => m.OrderId == orderId)
                 .FirstOrDefaultAsync();
 
+            if (!order.IsPay)
+            {
+                _orderService.RequestExecute();
+            }
+
             if (order == null)
             {
                 return this.ResultFail("没有找到指定订单");
