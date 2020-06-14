@@ -24,6 +24,12 @@ namespace Gorepo
             _orderService = orderService;
         }
 
+        [HttpGet("/status")]
+        public IActionResult Status()
+        {
+            return Content("/pull_order");
+        }
+
         [HttpGet("/pull_order")]
         public ResultModel PullOrder()
         {
