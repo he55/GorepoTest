@@ -17,7 +17,6 @@ namespace Gorepo
         private readonly IServiceProvider _serviceProvider;
         private readonly WeChatService _wechatService;
 
-        private bool _flag;
         private int _timestamp;
         private string _orderIdPrefix = "";
 
@@ -30,22 +29,22 @@ namespace Gorepo
             _configuration = configuration;
             _serviceProvider = serviceProvider;
             _wechatService = wechatService;
+
+            LoadConfiguration();
         }
 
-        private async Task PullOrderAsync()
+        private void LoadConfiguration()
         {
             GorepoContext context = _serviceProvider.CreateScope()
                 .ServiceProvider
                 .GetRequiredService<GorepoContext>();
 
-            if (!_flag)
-            {
-                _flag = true;
-                _timestamp = await context.WeChatMessages.MaxAsync(x => (int?)x.MessageCreateTime) ?? 0;
-                _orderIdPrefix = _configuration.GetValue<string>("App:OrderIdPrefix");
-            }
+            _timestamp = context.WeChatMessages.Max(x => (int?)x.MessageCreateTime) ?? 0;
+            _orderIdPrefix = _configuration.GetValue<string>("App:OrderIdPrefix");
+        }
 
-
+        private async Task PullOrderAsync()
+        {
             WeChatMessage[] messages;
             try
             {
@@ -64,6 +63,10 @@ namespace Gorepo
                 return;
             }
 
+
+            GorepoContext context = _serviceProvider.CreateScope()
+                .ServiceProvider
+                .GetRequiredService<GorepoContext>();
 
             foreach (WeChatMessage message in messages)
             {
