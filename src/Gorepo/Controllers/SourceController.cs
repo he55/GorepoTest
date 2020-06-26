@@ -7,14 +7,11 @@ namespace Gorepo
 {
     public class SourceController : ControllerBase
     {
-        private static string? s_appUrl;
+        private readonly IConfiguration _configuration;
 
         public SourceController(IConfiguration configuration)
         {
-            if (s_appUrl == null)
-            {
-                s_appUrl = configuration.GetValue<string>("App:AppUrl");
-            }
+            _configuration = configuration;
         }
 
         [HttpGet("release")]
@@ -27,8 +24,9 @@ namespace Gorepo
         [HttpGet("mobileconfig")]
         public async Task<IActionResult> GetMobileConfigAsync()
         {
+            string appUrl = _configuration.GetValue<string>("App:AppUrl");
             string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
-            string url = $"{s_appUrl}/tools/udid?t={timestamp}";
+            string url = $"{appUrl}/tools/udid?t={timestamp}";
 
             string mobileConfig = await AppleMobileConfig.MakeMobileConfigAsync(url, timestamp);
             return Content(mobileConfig, "application/x-apple-aspen-config");
