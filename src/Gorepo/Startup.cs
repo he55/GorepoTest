@@ -39,16 +39,12 @@ namespace Gorepo
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                ContentTypeProvider = new HWZFileExtensionContentTypeProvider()
-            });
+            FileServerOptions fileServerOptions = new FileServerOptions();
+            fileServerOptions.StaticFileOptions.ContentTypeProvider = new HWZFileExtensionContentTypeProvider();
+            fileServerOptions.DirectoryBrowserOptions.Formatter = new HWZDirectoryFormatter();
+            fileServerOptions.EnableDirectoryBrowsing = true;
 
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            {
-                Formatter = new HWZDirectoryFormatter()
-            });
-
+            app.UseFileServer(fileServerOptions);
 
             app.UseRouting();
 
