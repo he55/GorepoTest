@@ -1,9 +1,6 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,31 +21,11 @@ namespace Gorepo
         {
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddRazorPages();
-
-            services.AddSingleton<IDirectoryFormatter, HWZDirectoryFormatter>();
-
-            services.AddDbContextPool<GorepoContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("sqlite")));
-
-            services.AddHttpClient("wed", httpClient =>
-            {
-                httpClient.BaseAddress = new Uri(Configuration.GetValue<string>("App:wed"));
-                httpClient.Timeout = TimeSpan.FromSeconds(3.0);
-            });
-            services.AddSingleton<WeChatService>();
-            services.AddSingleton<OrderService>();
-
-            // services.AddHostedService<Worker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
-            IApplicationBuilder app,
-            IWebHostEnvironment env,
-            GorepoContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            context.Database.EnsureCreated();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -60,19 +37,18 @@ namespace Gorepo
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles(new StaticFileOptions()
             {
                 ContentTypeProvider = new HWZFileExtensionContentTypeProvider()
             });
 
-            /*
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
-                Formatter = app.ApplicationServices.GetService<IDirectoryFormatter>()
+                Formatter = new HWZDirectoryFormatter()
             });
-            */
+
 
             app.UseRouting();
 

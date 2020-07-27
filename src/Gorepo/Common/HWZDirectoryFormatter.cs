@@ -32,9 +32,9 @@ namespace Gorepo
 
         private readonly HtmlEncoder _htmlEncoder;
 
-        public HWZDirectoryFormatter(HtmlEncoder htmlEncoder)
+        public HWZDirectoryFormatter()
         {
-            _htmlEncoder = htmlEncoder;
+            _htmlEncoder = HtmlEncoder.Default;
         }
 
         public async Task GenerateContentAsync(HttpContext context, IEnumerable<IFileInfo> contents)
