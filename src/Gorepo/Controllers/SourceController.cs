@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace Gorepo
+namespace Gorepo.Controllers
 {
     public class SourceController : ControllerBase
     {
