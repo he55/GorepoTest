@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -54,12 +53,6 @@ namespace Gorepo
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-
-                endpoints.MapGet("/status", async context =>
-                {
-                    context.Response.ContentType = "text/plain; charset=utf-8";
-                    await context.Response.WriteAsync("/pull_order");
-                });
             });
         }
     }
