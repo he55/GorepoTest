@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.StaticFiles;
 
-namespace Gorepo
+namespace Gorepo.Common
 {
     public class HWZFileExtensionContentTypeProvider : FileExtensionContentTypeProvider
     {

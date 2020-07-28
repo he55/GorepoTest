@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gorepo
+namespace Gorepo.Common
 {
     public static class AppleMobileConfig
     {

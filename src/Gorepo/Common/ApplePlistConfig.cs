@@ -2,7 +2,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
-namespace Gorepo
+namespace Gorepo.Common
 {
     public static class ApplePlistConfig
     {
