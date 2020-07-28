@@ -12,7 +12,7 @@ namespace Gorepo.Pages
             _logger = logger;
         }
 
-        public string PackageId { get; set; } = string.Empty;
+        public string PackageId { get; set; } = "";
 
         public void OnGet(string packageId)
         {
