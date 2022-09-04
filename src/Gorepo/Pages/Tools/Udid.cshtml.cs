@@ -51,7 +51,7 @@ namespace Gorepo.Pages
                 _memoryCache.TryGetValue<string>(string.Format(PlistKeyFormat, id), out string plistString))
             {
                 PlistString = plistString;
-                PlistDictionary = ApplePlistConfig.GetPlistConfigModel(plistString);
+                PlistDictionary = AppleMobileConfig.GetPlistConfigModel(plistString);
             }
 
             return Page();
@@ -70,7 +70,7 @@ namespace Gorepo.Pages
                 await Request.Body.CopyToAsync(fileStream);
                 fileStream.Position = 0;
 
-                if (ApplePlistConfig.TryGetPlistString(fileStream, out string plistString))
+                if (AppleMobileConfig.TryGetPlistString(fileStream, out string plistString))
                 {
                     _memoryCache.Set(
                         string.Format(PlistKeyFormat, id),
