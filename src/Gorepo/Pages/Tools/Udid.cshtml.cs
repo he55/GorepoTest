@@ -26,7 +26,7 @@ namespace Gorepo.Pages
             if (Request.Headers["User-Agent"].Equals("Profile/1.0"))
                 return StatusCode(StatusCodes.Status204NoContent);
 
-            if (!string.IsNullOrWhiteSpace(id) && _memoryCache.TryGetValue<string>(id, out string plistString))
+            if (!string.IsNullOrWhiteSpace(id) && _memoryCache.TryGetValue(id, out string plistString))
                 PlistDictionary = AppleMobileConfig.GetPlistConfigModel(plistString);
 
             return Page();
@@ -39,7 +39,7 @@ namespace Gorepo.Pages
 
             string id = Guid.NewGuid().ToString();
 
-            using (FileStream fileStream = new FileStream(Path.Combine("plist", id + ".plist"), FileMode.Create))
+            using (FileStream fileStream = new FileStream(Path.Combine("plist", $"{id}.plist"), FileMode.Create))
             {
                 await Request.Body.CopyToAsync(fileStream);
                 fileStream.Position = 0;
