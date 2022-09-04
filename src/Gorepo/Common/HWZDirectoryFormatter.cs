@@ -31,19 +31,27 @@ namespace Gorepo.Common
         static readonly string s_directoryFormatterTemplate = File.ReadAllText("directory");
         static readonly HtmlEncoder s_htmlEncoder = HtmlEncoder.Default;
 
-        public async Task GenerateContentAsync(HttpContext context, IEnumerable<IFileInfo> contents)
+        public Task GenerateContentAsync(HttpContext context, IEnumerable<IFileInfo> contents)
         {
+            context.Response.ContentType = TextHtmlUtf8;
+
+            if (HttpMethods.IsHead(context.Request.Method))
+            {
+                // HEAD, no response body
+                return Task.CompletedTask;
+            }
+
             PathString requestPath = context.Request.Path;
 
-            StringBuilder stringBuilder = new StringBuilder(s_directoryFormatterTemplate);
-            stringBuilder.Replace("{{RequestPath}}", requestPath);
-            stringBuilder.Replace("{{PathLinkHtml}}", GetPathLinkHtml(requestPath));
-            stringBuilder.Replace("{{FileOrDirectoryHtml}}", GetFileOrDirectoryHtml(requestPath, contents));
+            StringBuilder builder = new StringBuilder(s_directoryFormatterTemplate);
+            builder.Replace("{{RequestPath}}", requestPath);
+            builder.Replace("{{PathLinkHtml}}", GetPathLinkHtml(requestPath));
+            builder.Replace("{{FileOrDirectoryHtml}}", GetFileOrDirectoryHtml(requestPath, contents));
 
-            byte[] bytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
-            context.Response.ContentType = TextHtmlUtf8;
+            string data = builder.ToString();
+            byte[] bytes = Encoding.UTF8.GetBytes(data);
             context.Response.ContentLength = bytes.Length;
-            await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+            return context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
         }
 
         static string GetPathLinkHtml(PathString pathString)
