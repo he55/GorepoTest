@@ -1,3 +1,5 @@
+using Gorepo.Common;
+
 namespace Gorepo
 {
     public class Program
@@ -27,6 +29,19 @@ namespace Gorepo
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            const string CT = "text/plain; charset=utf-8";
+            app.MapGet("/release", () => Results.File("release", CT));
+            app.MapGet("/packages", () => Results.File("packages", CT));
+            app.MapGet("/mobileconfig", () =>
+            {
+                string appUrl = app.Configuration.GetValue<string>("App:AppUrl");
+                string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
+                string url = $"{appUrl}/tools/udid?t={timestamp}";
+
+                string mobileConfig = AppleMobileConfig.MakeMobileConfig(url, timestamp);
+                return Results.Text(mobileConfig, "application/x-apple-aspen-config");
+            });
 
             app.Run();
         }
