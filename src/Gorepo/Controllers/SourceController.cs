@@ -22,13 +22,13 @@ namespace Gorepo.Controllers
         }
 
         [HttpGet("mobileconfig")]
-        public IActionResult GetMobileConfigAsync()
+        public IActionResult GetMobileConfig()
         {
             string appUrl = _configuration.GetValue<string>("App:AppUrl");
             string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
             string url = $"{appUrl}/tools/udid?t={timestamp}";
 
-            string mobileConfig = AppleMobileConfig.MakeMobileConfigAsync(url, timestamp);
+            string mobileConfig = AppleMobileConfig.MakeMobileConfig(url, timestamp);
             return Content(mobileConfig, "application/x-apple-aspen-config");
         }
     }
