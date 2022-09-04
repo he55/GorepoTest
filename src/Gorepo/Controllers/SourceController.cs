@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Gorepo.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,13 +22,13 @@ namespace Gorepo.Controllers
         }
 
         [HttpGet("mobileconfig")]
-        public async Task<IActionResult> GetMobileConfigAsync()
+        public IActionResult GetMobileConfigAsync()
         {
             string appUrl = _configuration.GetValue<string>("App:AppUrl");
             string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
             string url = $"{appUrl}/tools/udid?t={timestamp}";
 
-            string mobileConfig = await AppleMobileConfig.MakeMobileConfigAsync(url, timestamp);
+            string mobileConfig = AppleMobileConfig.MakeMobileConfigAsync(url, timestamp);
             return Content(mobileConfig, "application/x-apple-aspen-config");
         }
     }

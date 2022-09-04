@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.StaticFiles;
-using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace Gorepo.Common
 {
@@ -16,9 +16,9 @@ namespace Gorepo.Common
     /// </summary>
     public class HWZDirectoryFormatter : IDirectoryFormatter
     {
-        private const string TextHtmlUtf8 = "text/html; charset=utf-8";
-        private const string PathLinkFormat = "<a href=\"{0}\">{1}</a> / ";
-        private const string FileOrDirectoryFormat =
+        const string TextHtmlUtf8 = "text/html; charset=utf-8";
+        const string PathLinkFormat = "<a href=\"{0}\">{1}</a> / ";
+        const string FileOrDirectoryFormat =
 @"<li>
     <a href=""{0}"" class=""icon icon-{1}"" title=""{2}"">
         <span class=""name"">{2}</span>
@@ -28,20 +28,14 @@ namespace Gorepo.Common
 </li>
 ";
 
-        private static string? s_directoryFormatterTemplate;
-
-        private readonly HtmlEncoder _htmlEncoder;
-
-        public HWZDirectoryFormatter()
-        {
-            _htmlEncoder = HtmlEncoder.Default;
-        }
+        static readonly string s_directoryFormatterTemplate = File.ReadAllText("directory");
+        static readonly HtmlEncoder _htmlEncoder = HtmlEncoder.Default;
 
         public async Task GenerateContentAsync(HttpContext context, IEnumerable<IFileInfo> contents)
         {
             PathString requestPath = context.Request.Path;
 
-            StringBuilder stringBuilder = new StringBuilder(await GetDirectoryFormatterTemplateAsync());
+            StringBuilder stringBuilder = new StringBuilder(s_directoryFormatterTemplate);
             stringBuilder.Replace("{{RequestPath}}", requestPath);
             stringBuilder.Replace("{{PathLinkHtml}}", GetPathLinkHtml(requestPath));
             stringBuilder.Replace("{{FileOrDirectoryHtml}}", GetFileOrDirectoryHtml(requestPath, contents));
@@ -52,7 +46,7 @@ namespace Gorepo.Common
             await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
         }
 
-        private string GetPathLinkHtml(PathString pathString)
+        static string GetPathLinkHtml(PathString pathString)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendFormat(PathLinkFormat, "/", "~");
@@ -70,7 +64,7 @@ namespace Gorepo.Common
             return stringBuilder.ToString();
         }
 
-        private string GetFileOrDirectoryHtml(PathString pathString, IEnumerable<IFileInfo> contents)
+        static string GetFileOrDirectoryHtml(PathString pathString, IEnumerable<IFileInfo> contents)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -104,20 +98,10 @@ namespace Gorepo.Common
                     "default",
                     _htmlEncoder.Encode(file.Name),
                     file.Length.ToString("n0"),
-                    file.LastModified.LocalDateTime.ToString()
-                );
+                    file.LastModified.LocalDateTime.ToString());
             }
 
             return stringBuilder.ToString();
-        }
-
-        private static async Task<string> GetDirectoryFormatterTemplateAsync()
-        {
-            if (s_directoryFormatterTemplate == null)
-            {
-                s_directoryFormatterTemplate = await File.ReadAllTextAsync("directory");
-            }
-            return s_directoryFormatterTemplate;
         }
     }
 }
