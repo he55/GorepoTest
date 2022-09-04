@@ -20,7 +20,7 @@ namespace Gorepo
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             FileServerOptions fileServerOptions = new FileServerOptions();
             fileServerOptions.StaticFileOptions.ContentTypeProvider = new HWZFileExtensionContentTypeProvider();
