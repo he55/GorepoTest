@@ -1,5 +1,3 @@
-using Gorepo.Common;
-
 namespace Gorepo
 {
     public class Program
@@ -10,6 +8,7 @@ namespace Gorepo
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             var app = builder.Build();
 
@@ -22,7 +21,12 @@ namespace Gorepo
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+
+            FileServerOptions fileServerOptions = new FileServerOptions();
+            fileServerOptions.StaticFileOptions.ContentTypeProvider = new HWZFileExtensionContentTypeProvider();
+            fileServerOptions.DirectoryBrowserOptions.Formatter = new HWZDirectoryFormatter();
+            fileServerOptions.EnableDirectoryBrowsing = true;
+            app.UseFileServer(fileServerOptions);
 
             app.UseRouting();
 

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 
-namespace Gorepo.Common
+namespace Gorepo
 {
     /// <summary>
     /// Generates an HTML view for a directory.

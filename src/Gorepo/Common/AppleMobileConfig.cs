@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
-namespace Gorepo.Common
+namespace Gorepo
 {
     public static class AppleMobileConfig
     {
