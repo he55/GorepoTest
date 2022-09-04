@@ -12,47 +12,22 @@ namespace Gorepo.Pages
     [IgnoreAntiforgeryToken]
     public class UdidModel : PageModel
     {
-        private const string TimestampCookieKey = "timestamp";
-        private const double TimestampCookieTimeoutSeconds = 60.0;
-        private const string PlistKeyFormat = "plist_{0}";
-        private const string PlistPathFormat = "plist/{0}.data";
-        private const double PlistCacheTimeoutSeconds = 100.0;
-
         private readonly IMemoryCache _memoryCache;
-
-        public string? PlistString { get; set; }
-        public PlistDictionary? PlistDictionary { get; set; }
 
         public UdidModel(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }
 
+        public PlistDictionary? PlistDictionary { get; set; }
+
         public IActionResult OnGet(string id = "")
         {
-            if (!Request.Cookies.ContainsKey(TimestampCookieKey))
-            {
-                Response.Cookies.Append(
-                    TimestampCookieKey,
-                    DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString(),
-                    new CookieOptions
-                    {
-                        MaxAge = TimeSpan.FromSeconds(TimestampCookieTimeoutSeconds)
-                    }
-                );
-            }
-
             if (Request.Headers["User-Agent"].Equals("Profile/1.0"))
-            {
                 return StatusCode(StatusCodes.Status204NoContent);
-            }
 
-            if (!string.IsNullOrWhiteSpace(id) &&
-                _memoryCache.TryGetValue<string>(string.Format(PlistKeyFormat, id), out string plistString))
-            {
-                PlistString = plistString;
+            if (!string.IsNullOrWhiteSpace(id) && _memoryCache.TryGetValue<string>(id, out string plistString))
                 PlistDictionary = AppleMobileConfig.GetPlistConfigModel(plistString);
-            }
 
             return Page();
         }
@@ -60,24 +35,17 @@ namespace Gorepo.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             if (!Request.ContentType.Equals("application/pkcs7-signature", StringComparison.OrdinalIgnoreCase))
-            {
                 return RedirectToPage();
-            }
 
             string id = Guid.NewGuid().ToString();
-            using (FileStream fileStream = new FileStream(string.Format(PlistPathFormat, id), FileMode.Create))
+
+            using (FileStream fileStream = new FileStream(Path.Combine("plist", id + ".plist"), FileMode.Create))
             {
                 await Request.Body.CopyToAsync(fileStream);
                 fileStream.Position = 0;
 
                 if (AppleMobileConfig.TryGetPlistString(fileStream, out string plistString))
-                {
-                    _memoryCache.Set(
-                        string.Format(PlistKeyFormat, id),
-                        plistString,
-                        TimeSpan.FromSeconds(PlistCacheTimeoutSeconds)
-                    );
-                }
+                    _memoryCache.Set(id, plistString, TimeSpan.FromSeconds(100.0));
             }
 
             return RedirectToPagePermanent("", new { id });
